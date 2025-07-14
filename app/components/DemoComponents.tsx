@@ -154,12 +154,35 @@ type HomeProps = {
 };
 
 export function Home({ setActiveTab }: HomeProps) {
+  const { chain } = useAccount();
+  const { chains } = useConfig();
+
   return (
     <div className="space-y-6 animate-fade-in">
       <Card title="My First Mini App">
         <p className="text-[var(--app-foreground-muted)] mb-4">
           This is a minimalistic Mini App built with OnchainKit components.
         </p>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <div>chainInfo:</div>
+            <div> {JSON.stringify(CHAIN_INFO, null, 4)}</div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div>chainID:</div>
+            <div> {CHAIN_INFO.id}</div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div>wagmiUseAccount:</div>
+            <div>{JSON.stringify(chain, null, 4)}</div>
+            <div>{JSON.stringify(chain, null, 2)}</div>
+            <div>{chain?.id}</div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div>wagmiUseConfig:</div>
+            <div>{JSON.stringify(chains, null, 4)}</div>
+          </div>
+        </div>
         <Button
           onClick={() => setActiveTab("features")}
           icon={<Icon name="arrow-right" size="sm" />}

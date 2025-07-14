@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, TriangleAlert } from "lucide-react";
+import { Menu, TriangleAlert, Wallet } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,9 @@ import { Button } from "@/components/ui/button";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 import { useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
-import { useConnect } from "wagmi";
+import { useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
+import { CHAIN_INFO } from "@/constant/chains";
 
 const MENUS = [
   {
@@ -41,22 +42,24 @@ export default function Nav() {
   const pathname = usePathname();
 
   const { connect } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChain();
 
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
   const { isConnected, walletAddress, isInValidNetwork } = useAccount();
 
   const requestWalletConnect = () => {
     // openWallet();
-    connect({ connector: injected() });
+    connect({ connector: injected(), chainId: CHAIN_INFO.id });
   };
 
   useEffect(() => {
     if (!!isConnected && !!isInValidNetwork) {
       setTimeout(() => {
-        // openWallet({ view: "Networks" });
+        switchChain({ chainId: CHAIN_INFO.id });
       }, 300);
     }
-  }, [isConnected, isInValidNetwork]);
+  }, [isConnected, isInValidNetwork, pathname]);
 
   return (
     <header className="sticky top-0 bg-background px-4 md:px-6 border-b z-50">
@@ -189,13 +192,14 @@ export default function Nav() {
                   onClick={requestWalletConnect}
                 >
                   <div className="flex gap-2 items-center">
-                    <Image
+                    {/* <Image
                       src="/assets/icons/wallet-icon.svg"
                       width={18}
                       height={18}
                       alt="wallet"
-                    />
-                    <p className="text-sm font-semibold leading-5">
+                    /> */}
+                    <Wallet size={18} className="text-primary-foreground" />
+                    <p className="text-sm font-semibold leading-5 text-primary-foreground">
                       Wallet Connect
                     </p>
                   </div>
@@ -281,13 +285,8 @@ export default function Nav() {
                     onClick={requestWalletConnect}
                   >
                     <div className="flex gap-2 items-center">
-                      <Image
-                        src="/assets/icons/wallet-icon.svg"
-                        width={18}
-                        height={18}
-                        alt="wallet"
-                      />
-                      <p className="text-sm font-semibold leading-5">
+                      <Wallet size={18} className="text-primary-foreground" />
+                      <p className="text-sm font-semibold leading-5 text-primary-foreground">
                         Wallet Connect
                       </p>
                     </div>

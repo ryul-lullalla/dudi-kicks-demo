@@ -13,7 +13,7 @@ export const wagmiConfig = createConfig({
   chains: [baseSepolia], // prod + test
   multiInjectedProviderDiscovery: false,
   connectors: [
-    coinbaseWallet({ appName: "My MiniApp" }),
+    coinbaseWallet({ appName: "Dudi Kicks Demo" }),
     // walletConnect({
     //   projectId: process.env.NEXT_PUBLIC_WC_ID!,
     //   metadata,

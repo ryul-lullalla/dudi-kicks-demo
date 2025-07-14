@@ -32,3 +32,17 @@ export function validateNumber(value: string, maxDecimal = 18) {
 
   return true;
 }
+
+export function validateInteger(value: string) {
+  // Accept an empty string so that deletion during editing is not blocked
+  if (value === "") return true;
+
+  // Regex explanation:
+  // ^            start of string
+  // (0|[1-9]\d*)  "0" OR a non-zero digit followed by any digits
+  // $            end of string
+  // This disallows: +, -, e/E, leading decimal point, or any decimal portion.
+  const integerRegex = /^(0|[1-9]\d*)$/;
+
+  return integerRegex.test(value);
+}

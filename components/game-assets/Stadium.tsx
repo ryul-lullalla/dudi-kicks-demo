@@ -6,6 +6,7 @@ import Realistic from "react-canvas-confetti/dist/presets/realistic";
 import { Progress } from "../ui/progress";
 import LeftGoallyPepe from "../../../public/assets/images/player/left-goally-pepe.svg";
 import RightGoallyPepe from "../../../public/assets/images/player/right-goally-pepe.svg";
+import { useAccount } from "@/hooks/blockchain/useAccount";
 export function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
@@ -44,6 +45,8 @@ const Stadium = ({
   const [hasGameAnimated, setHasGameAnimated] = useState<boolean>(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const { chain, isConnected, isInValidNetwork } = useAccount();
 
   const playAudio = () => {
     if (audioRef?.current) {
@@ -265,11 +268,11 @@ const Stadium = ({
         <div
           className={`absolute top-[38%] left-0 h-12  animate-infinite-loop-x flex overflow-hidden`}
         >
-          <div className={`bg-sponsor-board h-12  w-[970px]`} />
-          <div className={`bg-sponsor-board h-12  w-[970px]`} />
-          <div className={`bg-sponsor-board h-12  w-[970px]`} />
-          <div className={`bg-sponsor-board h-12  w-[970px]`} />
-          <div className={`bg-sponsor-board h-12  w-[970px]`} />
+          <div className={`bg-sponsor-board h-12  w-[996px]`} />
+          <div className={`bg-sponsor-board h-12  w-[996px]`} />
+          <div className={`bg-sponsor-board h-12  w-[996px]`} />
+          <div className={`bg-sponsor-board h-12  w-[996px]`} />
+          <div className={`bg-sponsor-board h-12  w-[996px]`} />
         </div>
         <div
           className={`bg-goal-post absolute top-[25%] left-[439px] w-[320px] h-[160px] `}
@@ -490,15 +493,18 @@ const Stadium = ({
           </div>
           <div className="self-end w-full">
             <div className="flex flex-col">
-              {!isFormNotValid &&
+              {isConnected &&
+                !isInValidNetwork &&
+                !isFormNotValid &&
                 !isGameLoading &&
                 !hasGameAnimated &&
                 betResult === null && (
                   <div className="w-full mb-3 flex justify-center">
                     <p
-                      className="font-alfa-slab-one text-[120px] text-primary animate-text-win hover:animate-none hover:cursor-pointer hover:text-green-600"
+                      className="font-alfa-slab-one text-[120px] text-primary animate-text-win cursor-default select-none
+"
                       style={{ WebkitTextStroke: "6px rgba(0,0,0,1)" }}
-                      onClick={executeGame}
+                      // onClick={executeGame}
                     >
                       PLAY
                     </p>

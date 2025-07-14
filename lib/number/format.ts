@@ -1,4 +1,5 @@
 import fromExponential from "from-exponential";
+import Big from "big.js";
 
 export const formatCommas = (
   x: number | string | undefined,
@@ -166,6 +167,45 @@ export const nFormatter = (num: number, digits: number) => {
     : "0";
 };
 
+// New: Abbreviate large numbers (e.g. 1_500_000 -> "1.5M")
+export const formatAbbreviated = (
+  input: number | string | Big,
+  digits: number = 2,
+): string => {
+  const big = input instanceof Big ? input : new Big(input.toString());
+  // Determine suffix dynamically based on digit count (groups of 3)
+  const SUFFIXES = ["", "K", "M", "B", "T", "P", "E", "Z", "Y"];
+
+  // Number of integer digits
+  const intDigits = new Big(big.toFixed(0)).abs().toString().length;
+  const groupIndex = Math.floor((intDigits - 1) / 3); // e.g., 1 for thousands, 2 for millions
+
+  // No abbreviation needed (less than 1_000)
+  if (groupIndex === 0) {
+    return comma(big.toFixed(digits));
+  }
+
+  // Clamp index to available suffixes
+  const suffixIndex = Math.min(groupIndex, SUFFIXES.length - 1);
+  const suffix = SUFFIXES[suffixIndex];
+
+  const divisorPower = suffixIndex * 3; // 1 -> 1_000 (10^3), 2 -> 1_000_000 (10^6), etc.
+  const divisor = new Big(10).pow(divisorPower);
+
+  const quotient = big.div(divisor);
+
+  // Convert to string with *truncation* (round-down) at the requested precision.
+  const quotientStr = quotient.toFixed(digits, 0);
+
+  // Trim trailing zeros and dangling decimal point
+  const formattedNumber = quotientStr
+    .replace(/(\.\d*?[1-9])0+$/, "$1")
+    .replace(/\.0+$/, "")
+    .replace(/\.$/, "");
+
+  return `${formattedNumber}${suffix}`;
+};
+
 export function formatPrice(input: number | string) {
   let num = typeof input === "string" ? parseFloat(input) : input;
 
@@ -244,4 +284,29 @@ export const ellipsis = (
     return address;
   }
   return address.slice(0, head) + "..." + address.slice(-tail);
+};
+
+export const formatCrypto = (wei: bigint, decimal: number = 18) => {
+  const rawWei = wei;
+
+  const ETH_BASE = new Big(10).pow(decimal);
+  const ethBig = new Big(rawWei.toString()).div(ETH_BASE);
+
+  const SMALL_MINIMUM = new Big(0.01);
+  const isSmallerThanMinimum = ethBig.gt(0) && ethBig.lt(SMALL_MINIMUM);
+
+  const eth = isSmallerThanMinimum ? "<0.01" : ethBig.toFixed(0);
+
+  let formatted: string;
+  if (isSmallerThanMinimum) {
+    formatted = "<0.01";
+  } else {
+    formatted = formatAbbreviated(ethBig);
+  }
+
+  return {
+    wei: rawWei,
+    eth,
+    formatted,
+  };
 };

@@ -12,7 +12,19 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-
+import {
+  Name,
+  Identity,
+  Address,
+  Avatar,
+  EthBalance,
+} from "@coinbase/onchainkit/identity";
+import {
+  ConnectWallet,
+  Wallet,
+  WalletDropdown,
+  WalletDropdownDisconnect,
+} from "@coinbase/onchainkit/wallet";
 import { useState, useMemo } from "react";
 
 import Stadium from "@/components/game-assets/Stadium";
@@ -26,24 +38,46 @@ import { useAccount } from "@/hooks/blockchain/useAccount";
 import { Separator } from "@/components/ui/separator";
 
 import { math } from "@/lib/math";
-import { formatCommas, trimZero } from "@/lib/number/format";
+import {
+  comma,
+  decomma,
+  formatAbbreviated,
+  formatCommas,
+  formatCrypto,
+  nFormatter,
+  trimZero,
+} from "@/lib/number/format";
 import { useRequestGame } from "@/hooks/contract/useRequestGame";
 import { useGetPoolStatus } from "@/hooks/contract/useGetPoolStatus";
 import { useMeasure } from "@react-hookz/web";
-import { validateNumber } from "@/lib/number/validate";
+import { validateInteger, validateNumber } from "@/lib/number/validate";
 import { formatEther } from "viem";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import {
+  ChevronDown,
+  ExternalLink,
+  TriangleAlert,
+  Wallet as WalletIcon,
+} from "lucide-react";
 
 import useDimensions from "react-cool-dimensions";
 import Link from "next/link";
 import { DankKicksStats } from "@/components/dashboard/DankKicksStats";
 import { CHAIN_INFO } from "@/constant/chains";
-import { useConfig } from "wagmi";
+import { useBalance, useConfig } from "wagmi";
+import useChain from "@/hooks/blockchain/useChain";
+import { useTokenBalance } from "@/hooks/blockchain/useTokenBalance";
+import { KLEVA_TOKEN_ADDRESS } from "@/constant/tokens";
+import { DUDI_KICKS_CONTRACT_ADDRESS } from "@/constant/contracts";
+import useAllowance from "@/hooks/blockchain/useAllowance";
+import Big from "big.js";
+import { Button } from "@/components/ui/button";
+import useApproveToken from "@/hooks/blockchain/useApprove";
+import { LoadingSpinner } from "@/components/loader/Spinner";
 
 export type BetForm = {
   prediction: string;
@@ -54,11 +88,11 @@ export type BetForm = {
 const DefaultBetForm = {
   prediction: "",
   // direction: "",
-  token: "ETH",
+  token: "KP",
   betAmount: "",
 };
 
-const MINIMUM_BET_AMOUNT = "0.001";
+const MINIMUM_BET_AMOUNT = "100";
 
 export default function GamePage() {
   const [betResult, setBetResult] = useState<boolean | null>(null);
@@ -67,8 +101,10 @@ export default function GamePage() {
   const [gameProgress, setGameProgress] = useState<number>(0);
   const [gameRewards, setGameRewards] = useState<string>("0");
 
-  const { chain } = useAccount();
-  const { chains } = useConfig();
+  const { chain, isConnected, isInValidNetwork } = useAccount();
+  const config = useConfig();
+
+  const { isInvalidNetwork } = useChain();
 
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   // const [popoverRelative, popoeverRf] = useMeasure<HTMLDivElement>();
@@ -78,19 +114,45 @@ export default function GamePage() {
     // height: popoverContentHeight,
   } = useDimensions();
 
+  const { allowanceData: KPTokenAllowance = BigInt(0), refetchAllowance } =
+    useAllowance({
+      contractAddress: DUDI_KICKS_CONTRACT_ADDRESS.game,
+      tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
+    });
+
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
+  // const {
+  //   // isConnected,
+  //   // isInValidNetwork,
+  //   nativeBalance,
+  //   refetch: refetchBalance,
+  // } = useAccount();
+  // const { balance: klevaPointBalance } = useTokenBalance({
+  //   tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
+  // });
+
   const {
-    // isConnected,
-    // isInValidNetwork,
-    nativeBalance,
-    refetch: refetchBalance,
-  } = useAccount();
-  const {
-    // isLoading: isDankPoolQuerying,
-    // isError: isDankPoolQueryError,
-    data: dankPoolMaxLimit,
-    // error: dankPoolQueryError,
-  } = useGetPoolStatus();
+    balance: klevaPointBalance,
+    refetchTokenBalance: refetchKlevaPointTokenBalance,
+  } = useTokenBalance({
+    tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
+  });
+  const klevaPointToken = useMemo(
+    () =>
+      formatCrypto(
+        klevaPointBalance?.value || BigInt(0),
+        // BigInt(2750000000000000000000),
+        klevaPointBalance?.decimals || 0,
+      ),
+    [klevaPointBalance],
+  );
+
+  // const {
+  //   // isLoading: isDankPoolQuerying,
+  //   // isError: isDankPoolQueryError,
+  //   data: dankPoolMaxLimit,
+  //   // error: dankPoolQueryError,
+  // } = useGetPoolStatus();
 
   const changeProgressPrecentage = (progress: number) => {
     setGameProgress(progress);
@@ -117,6 +179,16 @@ export default function GamePage() {
   const prediction = watch("prediction");
   const betAmount = watch("betAmount");
 
+  const {
+    approveExcute,
+    shouldAllowTokenMore: shouldAllowKPMore,
+    isApproving,
+  } = useApproveToken({
+    contractAddress: DUDI_KICKS_CONTRACT_ADDRESS.game,
+    tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
+    tokenAmount: decomma(betAmount),
+  });
+
   const changeGameLoadingStatus = (status: boolean) => {
     setIsGameLoading(status);
   };
@@ -125,89 +197,54 @@ export default function GamePage() {
     setBetResult(null);
     setGameProgress(0);
     setGameRewards("0");
-    refetchBalance();
+    refetchKlevaPointTokenBalance();
   };
 
   const predictionOdds = prediction ? "1.95" : "0";
 
-  const betAmountInReceipt = formatCommas(math(betAmount).value(), 6);
-
-  const ethBalance = formatCommas(
-    math(nativeBalance?.formatted || "0").value(6),
-    6,
+  const betAmountInReceipt = formatAbbreviated(
+    math(decomma(betAmount)).toNumber(),
+    2,
   );
 
-  const estimatedWinAmount = formatCommas(
-    math(predictionOdds).mul(betAmount).value(6),
-    6,
+  const estimatedWinAmount = formatAbbreviated(
+    math(predictionOdds).mul(decomma(betAmount)).value(),
+    2,
   );
 
   const hasExceedBalance = useMemo(() => {
-    if (math(nativeBalance?.formatted || "0").lt(betAmount)) {
+    if (math(klevaPointToken.eth || "0").lt(decomma(betAmount))) {
       return true;
     }
     return false;
-  }, [betAmount, nativeBalance]);
+  }, [betAmount, klevaPointToken]);
 
   const hasViolatedMinimumAmount = useMemo(() => {
-    if (math(betAmount).lt(MINIMUM_BET_AMOUNT)) {
+    if (math(decomma(betAmount)).lt(MINIMUM_BET_AMOUNT)) {
       return true;
     }
     return false;
   }, [betAmount]);
 
-  const hasExceedPoolLimit = useMemo(() => {
-    const maxLimit = dankPoolMaxLimit as bigint | undefined;
-    if (maxLimit !== undefined) {
-      const formattedMaxLimit = formatEther(maxLimit);
-
-      if (math(betAmount).gt(formattedMaxLimit)) {
-        return true;
-      }
-    }
-    return false;
-  }, [betAmount, dankPoolMaxLimit]);
-
   const betHalfAmountOfBalance = () => {
-    const halfAmount = math(nativeBalance?.formatted || "0")
-      .mul("0.9")
-      .div(2);
-    if (
-      math(halfAmount.value()).gt(
-        (dankPoolMaxLimit as bigint | undefined) || "0",
-      )
-    ) {
-      const limitAmount = formatEther(
-        (dankPoolMaxLimit as bigint | undefined) || BigInt(0),
-      );
-      setValue("betAmount", limitAmount);
-      return;
+    const halfAmount = math(klevaPointToken?.eth || "0").div(2);
+    if (halfAmount.gte(0)) {
+      setValue("betAmount", halfAmount.value());
     }
-    setValue("betAmount", halfAmount.value());
   };
 
   const betMaxAmountOfBalance = () => {
-    const maxAmount = math(nativeBalance?.formatted || "0").mul("0.9");
+    const maxAmount = math(klevaPointToken?.eth || "0");
 
-    if (
-      math(maxAmount.value()).gt(
-        (dankPoolMaxLimit as bigint | undefined) || "0",
-      )
-    ) {
-      const limitAmount = formatEther(
-        (dankPoolMaxLimit as bigint | undefined) || BigInt(0),
-      );
-      setValue("betAmount", limitAmount);
-      return;
+    if (maxAmount.gte(0)) {
+      setValue("betAmount", maxAmount.value());
     }
-    setValue("betAmount", maxAmount.value());
   };
 
   // const invalidTokenAmount = false;
-  const invalidTokenAmount =
-    hasExceedBalance || hasViolatedMinimumAmount || hasExceedPoolLimit;
+  const invalidTokenAmount = hasExceedBalance || hasViolatedMinimumAmount;
 
-  const isFormFilled = !!prediction && math(betAmount).gt(0);
+  const isFormFilled = !!prediction && math(decomma(betAmount)).gt(0);
 
   // const isFormNotValid = false;
   const isFormNotValid = !isFormFilled || invalidTokenAmount;
@@ -233,7 +270,7 @@ export default function GamePage() {
     try {
       const gameResult = await requestGame({
         token: formStates.token,
-        amount: formStates.betAmount,
+        amount: decomma(formStates.betAmount),
         isSuccess: formStates.prediction === "score",
         direction: false,
         onProcessStartsCallback: changeGameLoadingStatus,
@@ -242,7 +279,6 @@ export default function GamePage() {
       if (gameResult?.length && gameResult?.length > 0) {
         const gameSummary = gameResult[2];
         setBetResult(!!gameSummary?.isWin);
-        console.log({ gameResult });
         const finalRewards = formatCommas(
           math(formatEther(gameResult[5])).value(6),
           6,
@@ -262,11 +298,6 @@ export default function GamePage() {
   const directTo = (url: string) => {
     window.open(url, "_blank");
   };
-
-  console.log({ chainInfo: CHAIN_INFO });
-  console.log({ chainID: CHAIN_INFO.id });
-  console.log({ wagmiUseAccount: chain });
-  console.log({ wagmiUseConfig: chains });
 
   return (
     // <section className="max-w-[1260px] mx-auto overflow-hidden z-10 my-2 sm:my-10 p-4 xl:p-0">
@@ -352,9 +383,7 @@ export default function GamePage() {
           <CardContent className="grid gap-6 p-0">
             <div className="flex flex-col gap-2">
               <div className="flex justify-between items-center">
-                <p className="text-lg text-primary font-semibold">
-                  Booster Kicks
-                </p>
+                <p className="text-lg text-primary font-semibold">Dudi Kicks</p>
                 <div>
                   <Popover>
                     <PopoverTrigger
@@ -446,7 +475,7 @@ export default function GamePage() {
                             </FormControl>
                             <Label
                               htmlFor="score"
-                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-zinc-900 peer-data-[state=unchecked]text-zinc-50 ${
+                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50 ${
                                 !!!prediction &&
                                 "animate-[pulse-back_2s_infinite]"
                               }`}
@@ -470,7 +499,7 @@ export default function GamePage() {
                             </FormControl>
                             <Label
                               htmlFor="block"
-                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-zinc-900 peer-data-[state=unchecked]text-zinc-50 ${
+                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50 ${
                                 !!!prediction &&
                                 // "animate-[pulse-back-delay_4s_infinite_1500ms]"
                                 "animate-[pulse-back-delay_2s_infinite]"
@@ -530,13 +559,19 @@ export default function GamePage() {
                           <Input
                             {...field}
                             className="w-full h-fit border-0 p-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring text-start text-zinc-50"
-                            inputMode="decimal"
+                            inputMode="numeric"
                             placeholder="Enter Amount"
                             disabled={isFormDisabled}
                             onChange={(event) => {
-                              const _value = trimZero(event.target.value);
-                              if (validateNumber(_value, 18)) {
-                                field.onChange(_value);
+                              const _value = trimZero(
+                                decomma(event.target.value),
+                              );
+                              if (_value === "") {
+                                field.onChange("");
+                                return;
+                              }
+                              if (validateInteger(_value)) {
+                                field.onChange(comma(_value));
                               }
                             }}
                           />
@@ -553,21 +588,21 @@ export default function GamePage() {
                                   disabled={isFormDisabled}
                                 >
                                   <FormControl>
-                                    <SelectValue defaultValue={"ETH"} />
+                                    <SelectValue defaultValue={"KP"} />
                                   </FormControl>
                                   <SelectContent>
-                                    <SelectItem value="ETH">
+                                    <SelectItem value="KP">
                                       <div className="flex gap-2 items-center">
-                                        <div className="w-6 h-6">
+                                        {/* <div className="w-6 h-6">
                                           <Image
                                             src={`/assets/tokens/ETH.svg`}
                                             width={24}
                                             height={24}
                                             alt="ETH"
                                           />
-                                        </div>
+                                        </div> */}
                                         <p className="text-sm font-medium text-zinc-50">
-                                          ETH
+                                          KP
                                         </p>
                                       </div>
                                     </SelectItem>
@@ -580,7 +615,7 @@ export default function GamePage() {
                       </div>
                       <div className="flex gap-2 justify-between items-center">
                         <p className="text-xs font-medium	 text-zinc-400">
-                          {`${ethBalance} ETH`}
+                          {`${isConnected ? klevaPointToken.formatted : "-"} KP`}
                         </p>
                         <div className="flex gap-2">
                           <p
@@ -614,13 +649,13 @@ export default function GamePage() {
                 <div className="flex justify-between items-center">
                   <p className="text-sm text-zinc-300">Entry</p>
                   <div className="flex gap-[1px] items-center text-sm font-medium text-zinc-50">
-                    <p className=""> {`${betAmountInReceipt} ETH`}</p>
+                    <p className=""> {`${betAmountInReceipt} KP`}</p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
                   <p className="text-sm text-zinc-300">Total</p>
                   <div className="flex gap-[1px] items-center text-sm font-medium text-primary">
-                    <p className="">{`${estimatedWinAmount} ETH`}</p>
+                    <p className="">{`${estimatedWinAmount} KP`}</p>
                   </div>
                 </div>
               </div>
@@ -634,13 +669,13 @@ export default function GamePage() {
                   </div>
                 </div> */}
                 {/* XXX: Disabled Temoporarily */}
-                {/* <>
+                <>
                   {!!isConnected ? (
                     isInValidNetwork ? (
                       <Button
                         type="submit"
-                        className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
-                        onClick={() => openWallet({ view: "Networks" })}
+                        className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
+                        // onClick={() => openWallet({ view: "Networks" })}
                       >
                         <div className="flex gap-2 items-center">
                           <TriangleAlert width={18} height={18} />
@@ -649,10 +684,45 @@ export default function GamePage() {
                           </p>
                         </div>
                       </Button>
+                    ) : !!prediction &&
+                      !!!invalidTokenAmount &&
+                      !!shouldAllowKPMore ? (
+                      isApproving ? (
+                        <Button
+                          type="submit"
+                          className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground`}
+                          // onClick={startKick}
+                          disabled={true}
+                        >
+                          <div className="flex items-center gap-2">
+                            <LoadingSpinner size={20} />
+                            <p className="text-sm font-semibold leading-5">
+                              Approving...
+                            </p>
+                          </div>
+                        </Button>
+                      ) : (
+                        <Button
+                          type="submit"
+                          className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
+                            !!prediction &&
+                            !!!invalidTokenAmount &&
+                            "animate-start-alert"
+                          }`}
+                          onClick={approveExcute}
+                          disabled={
+                            !isFormFilled ||
+                            !!invalidTokenAmount ||
+                            isFormDisabled
+                          }
+                        >
+                          Approve KP
+                        </Button>
+                      )
                     ) : (
                       <Button
                         type="submit"
-                        className={`text-sm font-semibold py-[10px] h-fit text-zinc-900 ${
+                        className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
                           !!prediction &&
                           !!!invalidTokenAmount &&
                           "animate-start-alert"
@@ -665,27 +735,26 @@ export default function GamePage() {
                         }
                       >
                         {invalidTokenAmount
-                          ? "Invalid Token Amount"
+                          ? "Invalid KP Amount"
                           : !!prediction
-                          ? "Shoot!"
-                          : "Select Prediction"}
+                            ? "Shoot!"
+                            : "Select Prediction"}
                       </Button>
                     )
                   ) : (
                     <Button
                       type="submit"
-                      className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
-                      onClick={requestWalletConnect}
+                      className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
+                      // onClick={requestWalletConnect}
                     >
                       <div className="flex gap-2 items-center">
-                        <Image
-                          src="/assets/icons/wallet-icon.svg"
-                          width={18}
-                          height={18}
-                          alt="wallet"
+                        <WalletIcon
+                          size={18}
+                          className="text-primary-foreground"
                         />
-                        <p className="text-sm font-semibold leading-5">
-                          Wallet Connect
+
+                        <p className="text-sm font-semibold leading-5 text-primary-foreground">
+                          Connect and Play
                         </p>
                       </div>
                     </Button>
@@ -693,23 +762,18 @@ export default function GamePage() {
                   {isConnected &&
                     !isInValidNetwork &&
                     invalidTokenAmount &&
-                    math(betAmount).gt("0") && (
+                    math(decomma(betAmount)).gt("0") && (
                       <div>
                         <p className="text-xs text-red-500 font-medium">
                           {hasExceedBalance
                             ? "Bet amount exceeds total balance."
                             : hasViolatedMinimumAmount
-                            ? `Bet amount should be greater than ${MINIMUM_BET_AMOUNT} ETH`
-                            : hasExceedPoolLimit
-                            ? `Bet amount is greater than the maximum amount from game pool: ${formatEther(
-                                (dankPoolMaxLimit as bigint | undefined) ||
-                                  BigInt(0)
-                              )} ETH`
-                            : ""}
+                              ? `Bet amount should be greater than ${MINIMUM_BET_AMOUNT} KP`
+                              : ""}
                         </p>
                       </div>
                     )}
-                </> */}
+                </>
               </div>
             </Form>
           </CardContent>
@@ -758,7 +822,7 @@ export default function GamePage() {
                     isInValidNetwork ? (
                       <Button
                         type="submit"
-                        className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                        className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                         onClick={() => openWallet({ view: "Networks" })}
                       >
                         <div className="flex gap-2 items-center">
@@ -771,7 +835,7 @@ export default function GamePage() {
                     ) : (
                       <Button
                         type="submit"
-                        className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                        className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                         // onClick={startKick}
                         // disabled={
                         //   !isFormFilled || !!invalidTokenAmount || isFormDisabled
@@ -783,7 +847,7 @@ export default function GamePage() {
                   ) : (
                     <Button
                       type="submit"
-                      className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                      className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                       onClick={requestWalletConnect}
                     >
                       <div className="flex gap-2 items-center">
@@ -848,7 +912,7 @@ export default function GamePage() {
                                 </FormControl>
                                 <Label
                                   htmlFor="score"
-                                  className="!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-zinc-900 peer-data-[state=unchecked]text-zinc-50"
+                                  className="!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50"
                                 >
                                   <div className="flex gap-1 items-center">
                                     <p className="text-sm text-center font-medium">
@@ -869,7 +933,7 @@ export default function GamePage() {
                                 </FormControl>
                                 <Label
                                   htmlFor="block"
-                                  className="!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-zinc-900 peer-data-[state=unchecked]text-zinc-50"
+                                  className="!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50"
                                 >
                                   <div className="flex gap-1 items-center">
                                     <p className="text-sm text-center font-medium">
@@ -990,7 +1054,7 @@ export default function GamePage() {
                       isInValidNetwork ? (
                         <Button
                           type="submit"
-                          className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                          className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                           onClick={() => openWallet({ view: "Networks" })}
                         >
                           <div className="flex gap-2 items-center">
@@ -1003,7 +1067,7 @@ export default function GamePage() {
                       ) : (
                         <Button
                           type="submit"
-                          className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                          className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                           onClick={startKick}
                           disabled={
                             !isFormFilled ||
@@ -1019,7 +1083,7 @@ export default function GamePage() {
                     ) : (
                       <Button
                         type="submit"
-                        className="text-sm font-semibold py-[10px] h-fit text-zinc-900"
+                        className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
                         onClick={requestWalletConnect}
                       >
                         <div className="flex gap-2 items-center">

@@ -1,4 +1,4 @@
-import { DankKicksABI } from "@/constant/abi/DankKicksABI";
+import { DudiKicksABI } from "@/constant/abi/DudiKicks";
 import { ETH_TOKEN_ADDRESS } from "@/constant/tokens";
 import { math } from "@/lib/math";
 import { parseUnits } from "viem";
@@ -12,12 +12,12 @@ import { writeContract, WriteContractErrorType } from "@wagmi/core";
 
 import { wagmiConfig } from "@/config/wagmi-config";
 import {
+  useConfig,
+  useWriteContract,
   useEstimateFeesPerGas,
   // useEstimateGas
 } from "wagmi";
-
-const DANK_KICKS_CONTRACT_ADDRESS = process.env
-  .NEXT_PUBLIC_DANK_KICKS_CONTRACT_ADDRESS as `0x${string}`;
+import { DUDI_KICKS_CONTRACT_ADDRESS } from "@/constant/contracts";
 
 export const useRequestGame = ({
   onProcessSuccessCallback,
@@ -25,6 +25,7 @@ export const useRequestGame = ({
   onProcessSuccessCallback: (progress: number) => void;
 }) => {
   const { data: estimatedPrice } = useEstimateFeesPerGas();
+  const { writeContractAsync } = useWriteContract();
 
   const requestGameInfoById = async (set: number, gameId: number) => {
     if (set === 0) {
@@ -73,8 +74,8 @@ export const useRequestGame = ({
       setTimeout(async () => {
         const uintGameId = BigInt(gameId);
         const gameResult = await readContract(wagmiConfig, {
-          abi: DankKicksABI,
-          address: DANK_KICKS_CONTRACT_ADDRESS,
+          abi: DudiKicksABI,
+          address: DUDI_KICKS_CONTRACT_ADDRESS.DUDI_KICKS,
           functionName: "kickInfo",
           args: [uintGameId],
         });
@@ -112,20 +113,20 @@ export const useRequestGame = ({
 
     try {
       onProcessStartsCallback(true);
-      const gameTxHash = await writeContract(wagmiConfig, {
-        abi: DankKicksABI,
-        address: DANK_KICKS_CONTRACT_ADDRESS,
+      const gameTxHash = await writeContractAsync({
+        abi: DudiKicksABI,
+        address: DUDI_KICKS_CONTRACT_ADDRESS.game,
         functionName: "kick",
-        value: tokenAmount,
         args: [
-          tokenAddress,
           tokenAmount,
           {
             isSuccess,
             direction,
             haveDirection: false,
           },
+          // tokenAddress,
         ],
+        value: tokenAmount,
         // gas: estimatedGas,
         // gasPrice: estimatedPrice?.gasPrice!,
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
@@ -152,7 +153,6 @@ export const useRequestGame = ({
         const gameId = parseInt(foundItem?.topics?.[2] || "0", 16);
 
         if (gameId > 0) {
-          console.log({ gameId });
           onProcessSuccessCallback(50);
           const gameInfoResponse = await requestGameInfoById(0, gameId);
 
@@ -180,6 +180,7 @@ export const useRequestGame = ({
         message: "no game tx created",
       });
     } catch (e) {
+      console.log({ e });
       const requestGameCallError = e as WriteContractErrorType;
 
       if (requestGameCallError?.message.includes("BettingAmountExceeded")) {
@@ -196,7 +197,6 @@ export const useRequestGame = ({
           message: "user rejected",
         });
       }
-      console.log({ requestGameCallError });
     }
   };
 
