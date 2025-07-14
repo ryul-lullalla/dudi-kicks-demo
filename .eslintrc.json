@@ -1,3 +1,109 @@
+// {
+//   "extends": [
+//     "eslint:recommended",
+//     "plugin:react/recommended",
+//     "plugin:@typescript-eslint/recommended",
+//     "next/core-web-vitals",
+//     "plugin:tailwindcss/recommended",
+//     "airbnb",
+//     // "react/hooks",
+//     "airbnb-typescript",
+//     "plugin:prettier/recommended"
+//   ],
+//   "plugins": [
+//     "unused-imports",
+//     "import",
+//     "react",
+//     // "@tanstack/query",
+//     "@typescript-eslint"
+//   ],
+//   "rules": {
+//     "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
+//     "no-empty": "warn",
+//     "no-plusplus": "warn",
+//     "max-classes-per-file": "off",
+//     "no-nested-ternary": "off",
+//     "react/no-array-index-key": "warn",
+//     "no-underscore-dangle": "warn",
+//     "react-hooks/exhaustive-deps": "warn",
+//     "unused-imports/no-unused-imports": "error",
+//     "jsx-a11y/click-events-have-key-events": "warn",
+//     "jsx-a11y/no-static-element-interactions": "warn",
+//     "default-case": "warn",
+//     "no-useless-escape": "off",
+//     "global-require": "warn",
+//     "no-shadow": "off",
+//     "@typescript-eslint/no-shadow": "off",
+//     "consistent-return": "off",
+//     "jsx-a11y/heading-has-content": "off",
+//     "@typescript-eslint/no-unused-vars": "warn",
+//     "react/no-unstable-nested-components": "warn",
+//     "@typescript-eslint/no-use-before-define": "off",
+//     "react/no-unknown-property": "off",
+//     "jsx-a11y/anchor-has-content": "off",
+//     "react/require-default-props": "off",
+//     "react/function-component-definition": "off",
+//     "react/jsx-no-constructed-context-values": "warn",
+//     "react/react-in-jsx-scope": "off",
+//     "react/jsx-props-no-spreading": "off",
+//     "import/prefer-default-export": "off",
+//     "no-extra-boolean-cast": "warn",
+//     "prettier/prettier": [
+//       "error",
+//       {
+//         "endOfLine": "auto"
+//       }
+//     ],
+//     "react/jsx-filename-extension": [
+//       1,
+//       { "extensions": [".js", ".jsx", ".ts", "tsx"] }
+//     ],
+//     "no-unused-vars": "warn",
+//     "no-console": 0,
+//     "no-tabs": 0,
+//     "quote-props": 0,
+//     "operator-linebreak": 0,
+//     "comma-dangle": 0,
+//     "no-param-reassign": 0,
+//     "react/prop-types": ["off"],
+//     "react/jsx-wrap-multilines": 0,
+//     "@typescript-eslint/explicit-module-boundary-types": 0,
+//     "import/extensions": 0,
+//     "linebreak-style": 0,
+//     "react/jsx-key": "error",
+//     "jsx-a11y/label-has-associated-control": [
+//       2,
+//       {
+//         "controlComponents": ["Input"],
+//         "depth": 2
+//       }
+//     ],
+//     "unused-imports/no-unused-vars": "error"
+//   }
+// }
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "plugins": ["unused-imports", "@typescript-eslint"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "prefer-const": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-empty-interface": [
+      "warn",
+      {
+        "allowInterface": "with-single-extends"
+      }
+    ]
+  }
 }

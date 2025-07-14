@@ -1,0 +1,35 @@
+import { CHAIN_ID } from "@/constant/chains";
+// import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useMemo } from "react";
+import { useBalance } from "wagmi";
+import { useAccount as useAccountWagmi } from "wagmi";
+
+export const useAccount = () => {
+  const { isConnected, address } = useAccountWagmi();
+
+  const balance = useBalance({
+    address: address,
+  });
+
+  const nativeBalance = balance.data;
+  const { chain } = useAccountWagmi();
+
+  // const { chains } = useConfig();
+
+  const chainId = useMemo(() => chain?.id, [chain]);
+
+  const isInValidNetwork = !!isConnected && chainId !== CHAIN_ID;
+
+  const refetchBalance = () => {
+    balance.refetch();
+  };
+
+  return {
+    nativeBalance,
+    isConnected,
+    walletAddress: address,
+    chain,
+    isInValidNetwork,
+    refetch: refetchBalance,
+  };
+};
