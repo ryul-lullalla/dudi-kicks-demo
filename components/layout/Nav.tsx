@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 import { useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
+import { useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 const MENUS = [
   {
@@ -38,11 +40,14 @@ const MENUS = [
 export default function Nav() {
   const pathname = usePathname();
 
+  const { connect } = useConnect();
+
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
   const { isConnected, walletAddress, isInValidNetwork } = useAccount();
 
   const requestWalletConnect = () => {
     // openWallet();
+    connect({ connector: injected() });
   };
 
   useEffect(() => {
