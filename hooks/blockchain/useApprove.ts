@@ -73,7 +73,7 @@ const useApproveToken = ({
     },
   });
 
-  console.log({ approveSimulationStatus, approveSimulationError });
+  console.log({ data, approveSimulationStatus, approveSimulationError });
 
   const { data: approveData, writeContractAsync: approveTokenApproval } =
     useWriteContract({});
