@@ -45,7 +45,7 @@ export const GameResultModal: React.FC<Props> = ({
   const goToExplorer = () => {
     window.open(
       "https://kromascan.com/address/0xD7F72F7e892549aFFCC12FB05796De69ec813e3F#tokentxns",
-      "_blank"
+      "_blank",
     );
   };
 
@@ -129,7 +129,7 @@ export const GameResultModal: React.FC<Props> = ({
     () => {
       handleConfetti();
     },
-    !!gameResult ? 550 : undefined
+    !!gameResult ? 550 : undefined,
   );
 
   // useEffect(() => {
@@ -181,7 +181,7 @@ export const GameResultModal: React.FC<Props> = ({
               <div className="w-full flex justify-center">
                 {!!gameResult ? (
                   <p
-                    className="font-alfa-slab-one text-[64px] text-green-500 animate-text-win cursor-none"
+                    className="font-alfa-slab-one text-[64px] text-primary animate-text-win cursor-none"
                     style={{ WebkitTextStroke: "3px rgba(255, 255, 255, 1)" }}
                   >
                     WIN!!

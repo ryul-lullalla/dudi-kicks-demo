@@ -59,9 +59,9 @@ export default function Nav() {
         <nav className="hidden flex-col gap-6 text-lg font-medium sm:flex sm:flex-row sm:items-center sm:gap-5 sm:text-sm lg:gap-6">
           <Link href="/game" className="w-[71px] h-10">
             <Image
-              src="/assets/logo/logo-dank-kicks.svg"
-              width={71}
-              height={40}
+              src="/assets/logo/logo_dudi.png"
+              width={57}
+              height={32}
               alt="dank-kicks-logo"
             />
           </Link>
@@ -85,7 +85,7 @@ export default function Nav() {
         <nav className="flex w-full justify-between items-center sm:hidden">
           <Link href="/game" className="w-[71px] h-10">
             <Image
-              src="/assets/logo/logo-dank-kicks.svg"
+              src="/assets/logo/logo_dudi.png"
               width={71}
               height={40}
               alt="dank-kicks-logo"

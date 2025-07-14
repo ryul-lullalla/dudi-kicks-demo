@@ -89,15 +89,15 @@ const Stadium = ({
               ? "left"
               : "right"
             : decision === 0
-            ? "right"
-            : "left"
+              ? "right"
+              : "left"
           : !!betResult
-          ? decision === 0
-            ? "right"
-            : "left"
-          : decision === 0
-          ? "left"
-          : "right";
+            ? decision === 0
+              ? "right"
+              : "left"
+            : decision === 0
+              ? "left"
+              : "right";
 
       const isGoalIn =
         formStates.prediction === "score"
@@ -105,8 +105,8 @@ const Stadium = ({
             ? "success"
             : "failed"
           : !!betResult
-          ? "failed"
-          : "success";
+            ? "failed"
+            : "success";
 
       setGoalInStatus(isGoalIn);
 
@@ -364,7 +364,7 @@ const Stadium = ({
         {(betResult === null || goallyDirection === "") && (
           <div className="absolute top-[32%] left-[508px] w-[182px] h-[182px]">
             <Image
-              src="/assets/images/player/stand-goally-pepe.svg"
+              src="/assets/images/player/stand-goally-default.svg"
               className={`animate-warigari-x`}
               fill
               style={{
@@ -384,7 +384,7 @@ const Stadium = ({
               }`}
             >
               <Image
-                src="/assets/images/player/left-goally-pepe.svg"
+                src="/assets/images/player/left-goally-default.svg"
                 // src={LeftGoallyPepe}
                 className={`${
                   goallyDirection === "left"
@@ -433,7 +433,7 @@ const Stadium = ({
               }`}
             >
               <Image
-                src="/assets/images/player/right-goally-pepe.svg"
+                src="/assets/images/player/right-goally-default.svg"
                 // src={RightGoallyPepe}
                 className={`${
                   goallyDirection === "right"
@@ -484,9 +484,9 @@ const Stadium = ({
         >
           <div className="flex justify-between w-full">
             <div className={`bg-score-board w-[186px] h-16`} />
-            <div
+            {/* <div
               className={`hidden sm:block bg-broadcast-name w-[212px] h-10 `}
-            />
+            /> */}
           </div>
           <div className="self-end w-full">
             <div className="flex flex-col">
@@ -496,7 +496,7 @@ const Stadium = ({
                 betResult === null && (
                   <div className="w-full mb-3 flex justify-center">
                     <p
-                      className="font-alfa-slab-one text-[120px] text-green-500 animate-text-win hover:animate-none hover:cursor-pointer hover:text-green-600"
+                      className="font-alfa-slab-one text-[120px] text-primary animate-text-win hover:animate-none hover:cursor-pointer hover:text-green-600"
                       style={{ WebkitTextStroke: "6px rgba(0,0,0,1)" }}
                       onClick={executeGame}
                     >

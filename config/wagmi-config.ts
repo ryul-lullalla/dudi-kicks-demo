@@ -10,15 +10,15 @@ const metadata = {
 };
 
 export const wagmiConfig = createConfig({
-  chains: [base, baseSepolia], // prod + test
+  chains: [baseSepolia], // prod + test
   multiInjectedProviderDiscovery: false,
   connectors: [
     coinbaseWallet({ appName: "My MiniApp" }),
-    walletConnect({
-      projectId: process.env.NEXT_PUBLIC_WC_ID!,
-      metadata,
-      showQrModal: false,
-    }),
+    // walletConnect({
+    //   projectId: process.env.NEXT_PUBLIC_WC_ID!,
+    //   metadata,
+    //   showQrModal: false,
+    // }),
   ],
-  transports: { [base.id]: http(), [baseSepolia.id]: http() },
+  transports: { [baseSepolia.id]: http() },
 });

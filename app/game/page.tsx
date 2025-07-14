@@ -42,6 +42,8 @@ import { ChevronDown, ExternalLink } from "lucide-react";
 import useDimensions from "react-cool-dimensions";
 import Link from "next/link";
 import { DankKicksStats } from "@/components/dashboard/DankKicksStats";
+import { CHAIN_INFO } from "@/constant/chains";
+import { useConfig } from "wagmi";
 
 export type BetForm = {
   prediction: string;
@@ -64,6 +66,9 @@ export default function GamePage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [gameProgress, setGameProgress] = useState<number>(0);
   const [gameRewards, setGameRewards] = useState<string>("0");
+
+  const { chain } = useAccount();
+  const { chains } = useConfig();
 
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   // const [popoverRelative, popoeverRf] = useMeasure<HTMLDivElement>();
@@ -258,6 +263,11 @@ export default function GamePage() {
     window.open(url, "_blank");
   };
 
+  console.log({ chainInfo: CHAIN_INFO });
+  console.log({ chainID: CHAIN_INFO.id });
+  console.log({ wagmiUseAccount: chain });
+  console.log({ wagmiUseConfig: chains });
+
   return (
     // <section className="max-w-[1260px] mx-auto overflow-hidden z-10 my-2 sm:my-10 p-4 xl:p-0">
     //   <div className="grid grid-cols-7 gap-8 flex-col xl:flex-row overflow-hidden z-20">
@@ -283,9 +293,10 @@ export default function GamePage() {
             />
           </CardContent>
         </div>
-        <div className="hidden lg:flex">
+        {/* [TODO]: Game Stats */}
+        {/* <div className="hidden lg:flex">
           <DankKicksStats />
-        </div>
+        </div> */}
       </div>
       <section className="max-w-full lg:max-w-[336px] lg:w-[336px] col-span-7 lg:col-span-2 gap-8 flex flex-col">
         {/* <div
@@ -614,14 +625,14 @@ export default function GamePage() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <div>
+                {/* <div>
                   <div className="font-bold text-base text-orange-500">
                     Season1 Ended!
                   </div>
                   <div className="font-medium text-xs text-orange-400">
                     🎉 Successfully concluded. See you next season!
                   </div>
-                </div>
+                </div> */}
                 {/* XXX: Disabled Temoporarily */}
                 {/* <>
                   {!!isConnected ? (
@@ -704,9 +715,11 @@ export default function GamePage() {
           </CardContent>
         </Card>
       </section>
-      <div className="flex lg:hidden">
+
+      {/* [TODO]: Game Stats */}
+      {/* <div className="flex lg:hidden">
         <DankKicksStats />
-      </div>
+      </div> */}
       {/* <div>
         <div
           onClick={() => {

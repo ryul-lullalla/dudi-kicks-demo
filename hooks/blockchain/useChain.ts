@@ -1,7 +1,12 @@
 import { useMemo } from "react";
 import { useAccount, useConfig } from "wagmi";
 
-import { CHAIN_ID, baseMainnet, baseTestnet } from "@/constant/chains";
+import {
+  CHAIN_ID,
+  CHAIN_INFO,
+  baseMainnet,
+  baseTestnet,
+} from "@/constant/chains";
 
 import { NATIVE_TOKEN_ADDRESS } from "@/constant/tokens";
 
@@ -17,17 +22,16 @@ const useChain = () => {
     () => chain?.blockExplorers?.default.url,
     [chain],
   );
-  const nativeTokenAddress = useMemo(() => NATIVE_TOKEN_ADDRESS[CHAIN_ID], []);
-  const isMainnet = useMemo(
-    () => Number(process.env.NEXT_PUBLIC_CHAIN_ID) === baseMainnet.id,
-    [],
-  );
-  const isTestnet = useMemo(
-    () => Number(process.env.NEXT_PUBLIC_CHAIN_ID) === baseTestnet.id,
+
+  const nativeTokenAddress = useMemo(
+    () => NATIVE_TOKEN_ADDRESS[CHAIN_INFO.id],
     [],
   );
 
-  const isInValidNetwork = !!isConnected && chainId !== CHAIN_ID;
+  const isMainnet = useMemo(() => Number(CHAIN_INFO.id) === baseMainnet.id, []);
+  const isTestnet = useMemo(() => Number(CHAIN_INFO.id) === baseTestnet.id, []);
+
+  const isInValidNetwork = !!isConnected && chainId !== CHAIN_INFO.id;
 
   return {
     chain,

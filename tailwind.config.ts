@@ -63,9 +63,12 @@ const config: Config = {
           "url(/assets/images/stadium/dank-kicks-stadium.svg)",
         "sponsor-board": "url(/assets/images/stadium/sponsor-board.svg)",
         "goal-post": "url(/assets/images/field/goal-post.svg)",
-        "stand-goally-pepe": "url(/assets/images/player/stand-goally-pepe.svg)",
-        "left-goally-pepe": "url(/assets/images/player/left-goally-pepe.svg)",
-        "right-goally-pepe": "url(/assets/images/player/right-goally-pepe.svg)",
+        "stand-goally-pepe":
+          "url(/assets/images/player/stand-goally-default.svg)",
+        "left-goally-pepe":
+          "url(/assets/images/player/left-goally-default.svg)",
+        "right-goally-pepe":
+          "url(/assets/images/player/right-goally-default.svg)",
         "attend-row-first": "url(/assets/images/stadium/hooligan-1.svg)",
         "attend-row-second": "url(/assets/images/stadium/hooligan-2.svg)",
         "attend-row-third": "url(/assets/images/stadium/hooligan-3.svg)",

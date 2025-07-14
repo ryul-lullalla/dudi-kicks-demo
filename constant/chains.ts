@@ -9,3 +9,5 @@ export const baseMainnet = {
 export const baseTestnet = {
   ...baseSepolia,
 } as const satisfies Chain;
+
+export const CHAIN_INFO = baseTestnet;

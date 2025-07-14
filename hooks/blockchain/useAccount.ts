@@ -1,4 +1,4 @@
-import { CHAIN_ID } from "@/constant/chains";
+import { CHAIN_ID, CHAIN_INFO } from "@/constant/chains";
 // import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useMemo } from "react";
 import { useBalance } from "wagmi";
@@ -18,7 +18,7 @@ export const useAccount = () => {
 
   const chainId = useMemo(() => chain?.id, [chain]);
 
-  const isInValidNetwork = !!isConnected && chainId !== CHAIN_ID;
+  const isInValidNetwork = !!isConnected && chainId !== CHAIN_INFO.id;
 
   const refetchBalance = () => {
     balance.refetch();
