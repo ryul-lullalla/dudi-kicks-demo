@@ -1,5 +1,5 @@
 "use client";
-
+import { useOpenUrl } from "@coinbase/onchainkit/minikit";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
@@ -50,7 +50,6 @@ import {
 } from "lucide-react";
 
 import useDimensions from "react-cool-dimensions";
-import Link from "next/link";
 import { CHAIN_INFO } from "@/constant/chains";
 import { injected, useConnect } from "wagmi";
 import { useTokenBalance } from "@/hooks/blockchain/useTokenBalance";
@@ -83,6 +82,8 @@ export default function GamePage() {
   const { chain, isConnected, isInValidNetwork } = useAccount();
 
   const { connect } = useConnect();
+
+  const openUrl = useOpenUrl();
 
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   // const [popoverRelative, popoeverRf] = useMeasure<HTMLDivElement>();
@@ -278,7 +279,7 @@ export default function GamePage() {
   };
 
   const directTo = (url: string) => {
-    window.open(url, "_blank");
+    openUrl(url);
   };
 
   return (
@@ -287,10 +288,10 @@ export default function GamePage() {
     <>
       <div className="flex flex-col gap-4 ">
         <div
-          className="max-w-full lg:max-w-[892px] lg:w-[892px] relative !bg-transparent overflow-hidden !rounded-lg"
+          className="relative max-w-full overflow-hidden !rounded-lg !bg-transparent lg:w-[892px] lg:max-w-[892px]"
           ref={ref}
         >
-          <CardContent className="!bg-transparent !p-0 !h-[648px] ">
+          <CardContent className="!h-[648px] !bg-transparent !p-0 ">
             <Stadium
               // betResult={true}
               betResult={betResult}
@@ -312,7 +313,7 @@ export default function GamePage() {
           <DankKicksStats />
         </div> */}
       </div>
-      <section className="max-w-full lg:max-w-[336px] lg:w-[336px] col-span-7 lg:col-span-2 gap-8 flex flex-col">
+      <section className="col-span-7 flex max-w-full flex-col gap-8 lg:col-span-2 lg:w-[336px] lg:max-w-[336px]">
         {/* <div
           className="w-full h-[96px] relative bg-green-800 border-[1px] border-green-700 rounded-lg	hover:cursor-pointer"
           onClick={() =>
@@ -365,21 +366,21 @@ export default function GamePage() {
         <Card className="p-6">
           <CardContent className="grid gap-6 p-0">
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center">
-                <p className="text-lg text-primary font-semibold">Dudi Kicks</p>
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-semibold text-primary">Dudi Kicks</p>
                 <div>
                   <Popover>
                     <PopoverTrigger
                       asChild
-                      className="bg-zinc-700 px-2 py-[2px] rounded-[24px] cursor-pointer"
+                      className="cursor-pointer rounded-[24px] bg-zinc-700 px-2 py-[2px]"
                     >
-                      <div className="flex text-zinc-300 items-center gap-2">
+                      <div className="flex items-center gap-2 text-zinc-300">
                         <p className="text-xs font-medium">Contract Link</p>
                         <ChevronDown size={16} />
                       </div>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="!shadow-[0_8px_16px_0px_#0000003D] !border-none bg-zinc-700 !py-2 !px-4 !w-fit"
+                      className="!w-fit !border-none bg-zinc-700 !px-4 !py-2 !shadow-[0_8px_16px_0px_#0000003D]"
                       align="end"
                       alignOffset={0}
                       side="bottom"
@@ -387,19 +388,24 @@ export default function GamePage() {
                       ref={popoverContentRef}
                     >
                       <div className="flex flex-col gap-[2px]">
-                        <Link
-                          className="flex gap-1 items-center justify-between cursor-pointer"
+                        <div
+                          className="flex cursor-pointer items-center justify-between gap-1"
                           // href={
                           //   "https://kromascan.com/address/0xa999d848655c33b3b63eC1564F426565252c3e9f"
                           // }
-                          href={`${CHAIN_INFO.blockExplorers.default.url}/address/${DUDI_KICKS_CONTRACT_ADDRESS.game}`}
-                          target="_blank"
+                          // href={`${CHAIN_INFO.blockExplorers.default.url}/address/${DUDI_KICKS_CONTRACT_ADDRESS.game}`}
+                          // target="_blank"
+                          onClick={() =>
+                            directTo(
+                              `${CHAIN_INFO.blockExplorers.default.url}/address/${DUDI_KICKS_CONTRACT_ADDRESS.game}`,
+                            )
+                          }
                         >
-                          <p className="text-xs font-medium text-zince-300">
+                          <p className="text-xs font-medium text-zinc-300">
                             Gaming Contract
                           </p>
                           <ExternalLink size={16} className="text-zinc-50" />
-                        </Link>
+                        </div>
                         {/* <Link
                           className="flex gap-1 items-center justify-between cursor-pointer"
                           href={
@@ -459,13 +465,13 @@ export default function GamePage() {
                             </FormControl>
                             <Label
                               htmlFor="score"
-                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50 ${
+                              className={`peer-data-[state=unchecked]text-zinc-50 flex !cursor-pointer flex-col items-center justify-between rounded-md border border-zinc-600 bg-transparent py-2 hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]:hover:bg-accent [&:has([data-state=checked])]:border-primary ${
                                 !!!prediction &&
                                 "animate-[pulse-back_2s_infinite]"
                               }`}
                             >
-                              <div className="flex gap-1 items-center">
-                                <p className="text-sm text-center font-medium">
+                              <div className="flex items-center gap-1">
+                                <p className="text-center text-sm font-medium">
                                   Score
                                 </p>
                               </div>
@@ -483,15 +489,15 @@ export default function GamePage() {
                             </FormControl>
                             <Label
                               htmlFor="block"
-                              className={`!cursor-pointer flex flex-col items-center justify-between rounded-md border-[1px] border-zinc-600 bg-transparent py-2 peer-data-[state=unchecked]:hover:bg-accent hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary [&:has([data-state=checked])]:border-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]text-zinc-50 ${
+                              className={`peer-data-[state=unchecked]text-zinc-50 flex !cursor-pointer flex-col items-center justify-between rounded-md border border-zinc-600 bg-transparent py-2 hover:border-primary hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground peer-data-[state=unchecked]:hover:bg-accent [&:has([data-state=checked])]:border-primary ${
                                 !!!prediction &&
                                 // "animate-[pulse-back-delay_4s_infinite_1500ms]"
                                 "animate-[pulse-back-delay_2s_infinite]"
                                 // "animate-highlight-back-delay"
                               }`}
                             >
-                              <div className="flex gap-1 items-center">
-                                <p className="text-sm text-center font-medium">
+                              <div className="flex items-center gap-1">
+                                <p className="text-center text-sm font-medium">
                                   Block
                                 </p>
                               </div>
@@ -505,20 +511,20 @@ export default function GamePage() {
               />
               <Separator className="bg-zinc-700" />
               <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <Label className="text-sm font-semibold">
                     Rewards on Win
                   </Label>
-                  <div className="flex gap-[1px] items-center border-primary">
-                    <p className="text-sm text-primary font-semibold">{`X ${predictionOdds}`}</p>
+                  <div className="flex items-center gap-px border-primary">
+                    <p className="text-sm font-semibold text-primary">{`X ${predictionOdds}`}</p>
                   </div>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <Label className="text-sm font-semibold">
                     Your Win Chance
                   </Label>
-                  <div className="flex gap-[1px] items-center border-primary">
-                    <p className="text-sm text-primary font-semibold">{`50%`}</p>
+                  <div className="flex items-center gap-px border-primary">
+                    <p className="text-sm font-semibold text-primary">{`50%`}</p>
                   </div>
                 </div>
               </div>
@@ -533,7 +539,7 @@ export default function GamePage() {
                         <Label className="text-sm font-semibold">Entry</Label>
                       </div>
                       <div
-                        className={`flex items-center bg-zinc-700 rounded-md py-2 px-4 ${
+                        className={`flex items-center rounded-md bg-zinc-700 px-4 py-2 ${
                           !!prediction &&
                           !!!betAmount &&
                           "animate-highlight-back"
@@ -542,7 +548,7 @@ export default function GamePage() {
                         <FormControl>
                           <Input
                             {...field}
-                            className="w-full h-fit border-0 p-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring text-start text-zinc-50"
+                            className="h-fit w-full border-0 p-0 text-start text-zinc-50 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring"
                             inputMode="numeric"
                             placeholder="Enter Amount"
                             disabled={isFormDisabled}
@@ -560,7 +566,7 @@ export default function GamePage() {
                             }}
                           />
                         </FormControl>
-                        <div className=" h-full flex items-center pl-4 [&>button>span]:text-lg rounded-md gap-2 bg-transparent">
+                        <div className=" flex h-full items-center gap-2 rounded-md bg-transparent pl-4 [&>button>span]:text-lg">
                           <FormField
                             control={form.control}
                             name="token"
@@ -576,7 +582,7 @@ export default function GamePage() {
                                   </FormControl>
                                   <SelectContent>
                                     <SelectItem value="KP">
-                                      <div className="flex gap-2 items-center">
+                                      <div className="flex items-center gap-2">
                                         {/* <div className="w-6 h-6">
                                           <Image
                                             src={`/assets/tokens/ETH.svg`}
@@ -597,20 +603,20 @@ export default function GamePage() {
                           />
                         </div>
                       </div>
-                      <div className="flex gap-2 justify-between items-center">
+                      <div className="flex items-center justify-between gap-2">
                         <p className="text-xs font-medium	 text-zinc-400">
                           {`${isConnected ? formatAbbreviated(klevaPointToken.eth) : "-"} KP`}
                         </p>
                         <div className="flex gap-2">
                           <p
-                            className="text-xs	text-primary font-medium	 hover:cursor-pointer"
+                            className="text-xs	font-medium text-primary	 hover:cursor-pointer"
                             onClick={betHalfAmountOfBalance}
                           >
                             HALF
                           </p>
                           <div className="text-xs text-zinc-400">/</div>
                           <p
-                            className="text-xs	text-primary font-medium	 hover:cursor-pointer"
+                            className="text-xs	font-medium text-primary	 hover:cursor-pointer"
                             onClick={betMaxAmountOfBalance}
                           >
                             MAX
@@ -624,21 +630,21 @@ export default function GamePage() {
               <Separator className="bg-zinc-700" />
               <div className="flex flex-col gap-2">
                 <Label className="text-sm font-semibold">Receipt</Label>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <p className="text-sm text-zinc-300">Reward on Win</p>
-                  <div className="flex gap-[1px] items-center text-sm font-medium text-zinc-50">
+                  <div className="flex items-center gap-px text-sm font-medium text-zinc-50">
                     <p className="">{`X ${predictionOdds}`}</p>
                   </div>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <p className="text-sm text-zinc-300">Entry</p>
-                  <div className="flex gap-[1px] items-center text-sm font-medium text-zinc-50">
+                  <div className="flex items-center gap-px text-sm font-medium text-zinc-50">
                     <p className=""> {`${betAmountInReceipt} KP`}</p>
                   </div>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <p className="text-sm text-zinc-300">Total</p>
-                  <div className="flex gap-[1px] items-center text-sm font-medium text-primary">
+                  <div className="flex items-center gap-px text-sm font-medium text-primary">
                     <p className="">{`${estimatedWinAmount} KP`}</p>
                   </div>
                 </div>
@@ -658,10 +664,10 @@ export default function GamePage() {
                     isInValidNetwork ? (
                       <Button
                         type="submit"
-                        className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
+                        className="h-fit py-[10px] text-sm font-semibold text-primary-foreground"
                         // onClick={() => openWallet({ view: "Networks" })}
                       >
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                           <TriangleAlert width={18} height={18} />
                           <p className="text-sm font-semibold leading-5">
                             Invalid Network
@@ -671,7 +677,7 @@ export default function GamePage() {
                     ) : (
                       <Button
                         type="submit"
-                        className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
+                        className={`h-fit py-[10px] text-sm font-semibold text-primary-foreground ${
                           !!prediction &&
                           !!!invalidTokenAmount &&
                           "animate-start-alert"
@@ -750,10 +756,10 @@ export default function GamePage() {
                     // )
                     <Button
                       type="submit"
-                      className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
+                      className="h-fit py-[10px] text-sm font-semibold text-primary-foreground"
                       onClick={requestWalletConnect}
                     >
-                      <div className="flex gap-2 items-center">
+                      <div className="flex items-center gap-2">
                         <WalletIcon
                           size={18}
                           className="text-primary-foreground"
@@ -770,7 +776,7 @@ export default function GamePage() {
                     invalidTokenAmount &&
                     math(decomma(betAmount)).gt("0") && (
                       <div>
-                        <p className="text-xs text-red-500 font-medium">
+                        <p className="text-xs font-medium text-red-500">
                           {hasExceedBalance
                             ? "Bet amount exceeds total balance."
                             : hasViolatedMinimumAmount

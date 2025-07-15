@@ -16,6 +16,7 @@ import { ExternalLink } from "lucide-react";
 import { useRef } from "react";
 import { useIntervalEffect } from "@react-hookz/web";
 import useChain from "@/hooks/blockchain/useChain";
+import { useOpenUrl } from "@coinbase/onchainkit/minikit";
 
 interface Props {
   gameResult: boolean;
@@ -35,6 +36,9 @@ export const GameResultModal: React.FC<Props> = ({
   onModalCloseCallback,
 }) => {
   const confettiRef = useRef<NodeJS.Timeout>();
+
+  const openUrl = useOpenUrl();
+
   const betAmount = formatCommas(
     math(decomma(formStates.betAmount)).value(6),
     6,
@@ -48,11 +52,12 @@ export const GameResultModal: React.FC<Props> = ({
   const receiveAmount = !!gameResult ? total : "0";
 
   const goToExplorer = () => {
-    window.open(
-      `${explorerUrl}/tx/${betResultTxHash}`,
-      // "https://kromascan.com/address/0xD7F72F7e892549aFFCC12FB05796De69ec813e3F#tokentxns",
-      "_blank",
-    );
+    // window.open(
+    //   `${explorerUrl}/tx/${betResultTxHash}`,
+    //   // "https://kromascan.com/address/0xD7F72F7e892549aFFCC12FB05796De69ec813e3F#tokentxns",
+    //   "_blank",
+    // );
+    openUrl(`${explorerUrl}/tx/${betResultTxHash}`);
   };
 
   const handleConfetti = () => {
@@ -272,7 +277,7 @@ export const GameResultModal: React.FC<Props> = ({
                       className="flex w-full items-center justify-center gap-2 rounded-[6px] bg-transparent px-4 py-2 "
                       onClick={goToExplorer}
                     >
-                      <p className="font-sm cursor-pointer border-none text-center text-xs text-zinc-50">
+                      <p className="cursor-pointer border-none text-center text-xs text-zinc-50">
                         Transfers history
                       </p>
                       <ExternalLink size={16} className="text-zinc-50" />
