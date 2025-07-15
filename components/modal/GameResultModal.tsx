@@ -178,23 +178,23 @@ export const GameResultModal: React.FC<Props> = ({
         {/* <Realistic autorun={{ speed: 1 }} /> */}
 
         <AlertDialogContent
-          className="p-6 pt-12 !bg-zinc-800 border-[1px] border-zinc-700"
+          className="border border-zinc-700 !bg-zinc-800 p-6 pt-12"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <AlertDialogTitle className="hidden" />
-          <section className="flex w-full justify-center h-fit">
-            <div className="w-full flex flex-col justify-center gap-6">
-              <div className="w-full flex justify-center">
+          <section className="flex h-fit w-full justify-center">
+            <div className="flex w-full flex-col justify-center gap-6">
+              <div className="flex w-full justify-center">
                 {!!gameResult ? (
                   <p
-                    className="font-alfa-slab-one text-[64px] text-primary animate-text-win cursor-none"
+                    className="animate-text-win cursor-none font-alfa-slab-one text-[64px] text-primary"
                     style={{ WebkitTextStroke: "3px rgba(255, 255, 255, 1)" }}
                   >
                     WIN!!
                   </p>
                 ) : (
                   <p
-                    className="font-alfa-slab-one text-[64px] text-red-500 animate-text-lose cursor-none"
+                    className="animate-text-lose cursor-none font-alfa-slab-one text-[64px] text-red-500"
                     style={{ WebkitTextStroke: "3px rgba(255, 255, 255, 1)" }}
                   >
                     LOSE..
@@ -224,7 +224,7 @@ export const GameResultModal: React.FC<Props> = ({
                   </div>
                 )} */}
                 <div className="flex items-center justify-start">
-                  <div className="flex gap-2 items-center w-fit ">
+                  <div className="flex w-fit items-center gap-2 ">
                     <p className="text-sm	font-semibold text-zinc-50">Receipt</p>
                     {/* {!!gameResult && (
                       <ExternalLink
@@ -235,23 +235,23 @@ export const GameResultModal: React.FC<Props> = ({
                     )} */}
                   </div>
                 </div>
-                <div className="w-full flex justify-between">
+                <div className="flex w-full justify-between">
                   <p className="text-sm	font-semibold text-zinc-300">
                     Reward on Win
                   </p>
                   <p className="text-sm	font-semibold text-zinc-50">{`X ${odds}`}</p>
                 </div>
-                <div className="w-full flex justify-between">
+                <div className="flex w-full justify-between">
                   <p className="text-sm	font-semibold text-zinc-300">Entry</p>
                   <p className="text-sm	font-semibold text-zinc-50">{`${betAmount} KP`}</p>
                 </div>
-                <div className="w-full flex justify-between">
+                <div className="flex w-full justify-between">
                   <p className="text-sm	font-semibold text-zinc-300">Total</p>
                   <p className="text-sm	font-semibold text-zinc-50">{`${total} KP`}</p>
                 </div>
                 <Separator className="bg-zinc-700" />
                 <div className="w-full">
-                  <div className="w-full flex justify-between">
+                  <div className="flex w-full justify-between">
                     <p className="text-sm	font-semibold text-zinc-300">
                       You Receive
                     </p>
@@ -262,17 +262,17 @@ export const GameResultModal: React.FC<Props> = ({
               <div className="flex flex-col gap-2">
                 <AlertDialogAction
                   onClick={() => onModalCloseCallback()}
-                  className="w-full text-primary-foreground text-sm font-semibold"
+                  className="w-full text-sm font-semibold text-primary-foreground"
                 >
                   Play again
                 </AlertDialogAction>
                 {!!betResultTxHash && (
                   <div className="flex cursor-pointer items-center">
                     <div
-                      className="flex gap-2 items-center w-full justify-center rounded-[6px] bg-transparent py-2 px-4 "
+                      className="flex w-full items-center justify-center gap-2 rounded-[6px] bg-transparent px-4 py-2 "
                       onClick={goToExplorer}
                     >
-                      <p className="text-xs text-zinc-50 font-sm border-none cursor-pointer text-center">
+                      <p className="font-sm cursor-pointer border-none text-center text-xs text-zinc-50">
                         Transfers history
                       </p>
                       <ExternalLink size={16} className="text-zinc-50" />

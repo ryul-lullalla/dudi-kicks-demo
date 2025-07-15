@@ -13,7 +13,7 @@ export const MainLayout = ({ children }: Props) => {
 
   return (
     <section className="">
-      <div className="flex items-center justify-center mx-auto w-full relative">
+      <div className="relative mx-auto flex w-full items-center justify-center">
         {/* Sliding border indicator */}
         <div
           className={`absolute bottom-0 h-[2px] bg-zinc-50 transition-all duration-300 ease-in-out ${
@@ -23,9 +23,9 @@ export const MainLayout = ({ children }: Props) => {
 
         <Link
           href={"/"}
-          className="hover:cursor-pointer border-b border-zinc-800 min-w-[164px] w-1/2 py-[14px] flex items-center justify-center transition-colors duration-300 ease-in-out"
+          className="flex w-1/2 min-w-[164px] items-center justify-center border-b border-zinc-800 py-[14px] transition-colors duration-300 ease-in-out hover:cursor-pointer"
         >
-          <div className="flex flex-col justify-center gap-2 items-center">
+          <div className="flex flex-col items-center justify-center gap-2">
             <div>
               <HandCoins
                 width={22}
@@ -36,7 +36,7 @@ export const MainLayout = ({ children }: Props) => {
               />
             </div>
             <div
-              className={`text-[12px] leading-5 font-medium transition-colors duration-300 ease-in-out ${
+              className={`text-[12px] font-medium leading-5 transition-colors duration-300 ease-in-out ${
                 isGetKP ? "text-zinc-50" : "text-zinc-400"
               }`}
             >
@@ -47,9 +47,9 @@ export const MainLayout = ({ children }: Props) => {
 
         <Link
           href={"/bet"}
-          className="hover:cursor-pointer border-b border-zinc-800 min-w-[164px] w-1/2 py-[14px] flex items-center justify-center transition-colors duration-300 ease-in-out"
+          className="flex w-1/2 min-w-[164px] items-center justify-center border-b border-zinc-800 py-[14px] transition-colors duration-300 ease-in-out hover:cursor-pointer"
         >
-          <div className="flex flex-col justify-center gap-2 items-center">
+          <div className="flex flex-col items-center justify-center gap-2">
             <div>
               <Dice5
                 width={22}
@@ -60,7 +60,7 @@ export const MainLayout = ({ children }: Props) => {
               />
             </div>
             <div
-              className={`text-[12px] leading-5 font-medium transition-colors duration-300 ease-in-out ${
+              className={`text-[12px] font-medium leading-5 transition-colors duration-300 ease-in-out ${
                 isBetKP ? "text-zinc-50" : "text-zinc-400"
               }`}
             >

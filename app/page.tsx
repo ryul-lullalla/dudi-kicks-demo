@@ -26,18 +26,18 @@ export default function App() {
   }, [setFrameReady, isFrameReady]);
 
   return (
-    <div className="flex w-full py-6 px-4">
+    <div className="flex w-full px-4 py-6">
       <Tabs defaultValue="earn" className="w-full">
-        <TabsList className="w-full flex justify-between h-10">
-          <TabsTrigger className="w-1/2 h-8" value="earn">
+        <TabsList className="flex h-10 w-full justify-between">
+          <TabsTrigger className="h-8 w-1/2" value="earn">
             Earn
           </TabsTrigger>
-          <TabsTrigger className="w-1/2 h-8" value="buy" disabled>
+          <TabsTrigger className="h-8 w-1/2" value="buy" disabled>
             Buy
           </TabsTrigger>
         </TabsList>
         <TabsContent value="earn" className="mt-6">
-          <Card className="bg-zinc-800 border-zinc-700">
+          <Card className="border-zinc-700 bg-zinc-800">
             <CardHeader>
               <CardTitle className="text-xl text-zinc-50">
                 Post and Earn KP!
@@ -45,20 +45,20 @@ export default function App() {
             </CardHeader>
             <CardContent className="grid gap-6">
               <div className="flex w-full flex-col gap-6">
-                <div className="flex flex-row w-full gap-4 ">
+                <div className="flex w-full flex-row gap-4 ">
                   <div>
-                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                    <div className="flex w-[50px] items-center justify-center rounded-md bg-primary p-1 text-sm font-normal leading-5 text-zinc-50">
                       <p>Step 1</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className="text-zinc-100 text-base font-bol leading-7">
+                  <div className="flex w-full flex-col gap-2">
+                    <div className="text-base font-bold leading-7 text-zinc-100">
                       How to Participate
                     </div>
                     <div>
-                      <div className="text-sm leading-6 flex whitespace-pre-wrap">
+                      <div className="flex whitespace-pre-wrap text-sm leading-6">
                         {`1. Go to `}
-                        <p className="underline font-bold hover:cursor-pointer">
+                        <p className="font-bold underline hover:cursor-pointer">
                           /Kleva
                         </p>
                       </div>
@@ -68,50 +68,50 @@ export default function App() {
                       </div>
                     </div>
                     <div>
-                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
-                        <p className="text-sm leading-5 font-semibold">
+                      <div className=" flex w-full items-center justify-center rounded-md border border-zinc-700 px-2 py-1">
+                        <p className="text-sm font-semibold leading-5">
                           ✈️ Korea Travel Tips
                         </p>
                       </div>
                     </div>
                     <div>
-                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
-                        <p className="text-sm leading-5 font-semibold">
+                      <div className=" flex w-full items-center justify-center rounded-md border border-zinc-700 px-2 py-1">
+                        <p className="text-sm font-semibold leading-5">
                           🛍️ Product Reviews
                         </p>
                       </div>
                     </div>
                     <div>
-                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
-                        <p className="text-sm leading-5 font-semibold">
+                      <div className=" flex w-full items-center justify-center rounded-md border border-zinc-700 px-2 py-1">
+                        <p className="text-sm font-semibold leading-5">
                           👶 Parenting Hacks
                         </p>
                       </div>
                     </div>
                     <div>
-                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
-                        <p className="text-sm leading-5 font-semibold">
+                      <div className=" flex w-full items-center justify-center rounded-md border border-zinc-700 px-2 py-1">
+                        <p className="text-sm font-semibold leading-5">
                           🧴 Must-Buy Items in Korea
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row w-full gap-4 ">
+                <div className="flex w-full flex-row gap-4 ">
                   <div>
-                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                    <div className="flex w-[50px] items-center justify-center rounded-md bg-primary p-1 text-sm font-normal leading-5 text-zinc-50">
                       <p>Step 2</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className="text-zinc-100 text-base font-bol leading-7">
+                  <div className="flex w-full flex-col gap-2">
+                    <div className="text-base font-bold leading-7 text-zinc-100">
                       {`Don't Forget to Tag @klevaAI`}
                     </div>
                     <div className="flex items-start">
-                      <div className="flex items-center justify-center h-6">
+                      <div className="flex h-6 items-center justify-center">
                         &#x2022;
                       </div>
-                      <div className="text-sm leading-6 whitespace-pre-wrap">
+                      <div className="whitespace-pre-wrap text-sm leading-6">
                         Make sure to include
                         <span className="font-bold hover:cursor-pointer">
                           {` @klevaAI `}
@@ -121,21 +121,21 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-row w-full gap-4 ">
+                <div className="flex w-full flex-row gap-4 ">
                   <div>
-                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                    <div className="flex w-[50px] items-center justify-center rounded-md bg-primary p-1 text-sm font-normal leading-5 text-zinc-50">
                       <p>Step 3</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className="text-zinc-100 text-base font-bol leading-7">
+                  <div className="flex w-full flex-col gap-2">
+                    <div className="text-base font-bold leading-7 text-zinc-100">
                       Earn KP Automatically
                     </div>
                     <div className="flex items-start">
-                      <div className="flex items-center justify-center h-6">
+                      <div className="flex h-6 items-center justify-center">
                         &#x2022;
                       </div>
-                      <div className="text-sm leading-6 whitespace-pre-wrap">
+                      <div className="whitespace-pre-wrap text-sm leading-6">
                         Every week, your eligible posts will be reviewed and
                         rewarded with KP (Kleva Points) automatically.
                       </div>
