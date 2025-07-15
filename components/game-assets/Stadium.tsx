@@ -155,9 +155,9 @@ const Stadium = ({
   return (
     <div>
       {(!hasMounted || relativeWidth === 0) && (
-        <div className="w-full h-full absolute bg-game-loading z-10 gap-6">
-          <div className="w-full h-full flex flex-col justify-evenly">
-            <div className="relative w-full h-[50%]">
+        <div className="absolute z-10 size-full gap-6 bg-game-loading">
+          <div className="flex size-full flex-col justify-evenly">
+            <div className="relative h-[50%] w-full">
               <Image
                 // src={"/assets/logo/logo-dank-kicks-lg.svg"}
                 src={"/assets/logo/logo-dank-kicks.png"}
@@ -171,8 +171,8 @@ const Stadium = ({
               />
             </div>
 
-            <div className="w-full flex justify-center">
-              <p className="text-3xl font-normal text-zinc-50 animate-pulse">
+            <div className="flex w-full justify-center">
+              <p className="animate-pulse text-3xl font-normal text-zinc-50">
                 Loading...
               </p>
               {/* <p className="text-3xl font-normal text-zinc-50 animate-[flip_2s_infinite_200ms]">
@@ -215,20 +215,20 @@ const Stadium = ({
           left: finalCorrection,
           overflow: "hidden",
         }}
-        className={`w-[1198px] h-[648px] absolute`}
+        className={`absolute h-[648px] w-[1198px]`}
       >
         <Image
           src="/assets/images/stadium/dank-kicks-stadium.svg"
           width={1198}
           height={648}
           alt="football-stadium"
-          className={`-z-50 absolute`}
+          className={`absolute -z-50`}
           onLoadingComplete={() => {
             setHasMounted(true);
           }}
           priority
         />
-        <div className="w-full h-[106px] absolute top-[18%] left-0 ">
+        <div className="absolute left-0 top-[18%] h-[106px] w-full ">
           <Image
             src="/assets/images/stadium/hooligan-3.svg"
             className={`animate-[bounce_1s_infinite_200ms]`}
@@ -240,7 +240,7 @@ const Stadium = ({
             priority
           />
         </div>
-        <div className="w-full h-[106px] absolute top-[23%] left-0">
+        <div className="absolute left-0 top-[23%] h-[106px] w-full">
           <Image
             src="/assets/images/stadium/hooligan-2.svg"
             className={`animate-[bounce_1s_infinite_100ms]`}
@@ -252,7 +252,7 @@ const Stadium = ({
             priority
           />
         </div>
-        <div className="w-full h-[106px] absolute top-[28%] left-0">
+        <div className="absolute left-0 top-[28%] h-[106px] w-full">
           <Image
             src="/assets/images/stadium/hooligan-1.svg"
             className={`animate-[bounce_1s_infinite_1ms]`}
@@ -265,16 +265,16 @@ const Stadium = ({
           />
         </div>
         <div
-          className={`absolute top-[38%] left-0 h-12  animate-infinite-loop-x flex overflow-hidden`}
+          className={`absolute left-0 top-[38%] flex  h-12 animate-infinite-loop-x overflow-hidden`}
         >
-          <div className={`bg-sponsor-board h-12  w-[996px]`} />
-          <div className={`bg-sponsor-board h-12  w-[996px]`} />
-          <div className={`bg-sponsor-board h-12  w-[996px]`} />
-          <div className={`bg-sponsor-board h-12  w-[996px]`} />
-          <div className={`bg-sponsor-board h-12  w-[996px]`} />
+          <div className={`h-12 w-[996px]  bg-sponsor-board`} />
+          <div className={`h-12 w-[996px]  bg-sponsor-board`} />
+          <div className={`h-12 w-[996px]  bg-sponsor-board`} />
+          <div className={`h-12 w-[996px]  bg-sponsor-board`} />
+          <div className={`h-12 w-[996px]  bg-sponsor-board`} />
         </div>
         <div
-          className={`bg-goal-post absolute top-[25%] left-[439px] w-[320px] h-[160px] `}
+          className={`absolute left-[439px] top-1/4 h-[160px] w-[320px] bg-goal-post `}
         />
         {/* {betResult === null || goallyDirection === "" ? (
           <div className="absolute top-[32%] left-[508px] w-[182px] h-[182px]">
@@ -364,7 +364,7 @@ const Stadium = ({
           </>
         )} */}
         {(betResult === null || goallyDirection === "") && (
-          <div className="absolute top-[32%] left-[508px] w-[182px] h-[182px]">
+          <div className="absolute left-[508px] top-[32%] size-[182px]">
             <Image
               src="/assets/images/player/stand-goally-default.svg"
               className={`animate-warigari-x`}
@@ -381,7 +381,7 @@ const Stadium = ({
           {/* {goallyDirection === "left" && ( */}
           <>
             <div
-              className={`absolute top-[32%] left-[471px] w-[256px] h-[182px] ${
+              className={`absolute left-[471px] top-[32%] h-[182px] w-[256px] ${
                 goallyDirection === "left" ? "visible" : "invisible"
               }`}
             >
@@ -402,7 +402,7 @@ const Stadium = ({
               />
               {/* {goalInStatus === "failed" && ( */}
               <div
-                className={`absolute top-[-13px] left-[-22px] w-[96px] h-[96px] ${
+                className={`absolute left-[-22px] top-[-13px] size-[96px] ${
                   goalInStatus === "failed" && goallyDirection === "left"
                     ? "visible"
                     : "invisible"
@@ -430,7 +430,7 @@ const Stadium = ({
           {/* {goallyDirection === "right" && ( */}
           <>
             <div
-              className={`absolute top-[32%] left-[471px] w-[256px] h-[182px] ${
+              className={`absolute left-[471px] top-[32%] h-[182px] w-[256px] ${
                 goallyDirection === "right" ? "visible" : "invisible"
               }`}
             >
@@ -451,7 +451,7 @@ const Stadium = ({
               />
               {/* {goalInStatus === "failed" && ( */}
               <div
-                className={`absolute top-[-22px] right-[-22px] w-[96px] h-[96px] ${
+                className={`absolute right-[-22px] top-[-22px] size-[96px] ${
                   goalInStatus === "failed" && goallyDirection === "right"
                     ? "visible"
                     : "invisible"
@@ -479,18 +479,18 @@ const Stadium = ({
         </>
 
         <div
-          className="flex flex-col justify-between p-4 m-auto h-full"
+          className="m-auto flex h-full flex-col justify-between p-4"
           style={{
             maxWidth: relativeWidth,
           }}
         >
-          <div className="flex justify-between w-full">
-            <div className={`bg-score-board w-[186px] h-16`} />
+          <div className="flex w-full justify-between">
+            <div className={`h-16 w-[186px] bg-score-board`} />
             {/* <div
               className={`hidden sm:block bg-broadcast-name w-[212px] h-10 `}
             /> */}
           </div>
-          <div className="self-end w-full">
+          <div className="w-full self-end">
             <div className="flex flex-col">
               {isConnected &&
                 !isInValidNetwork &&
@@ -498,9 +498,9 @@ const Stadium = ({
                 !isGameLoading &&
                 !hasGameAnimated &&
                 betResult === null && (
-                  <div className="w-full mb-3 flex justify-center">
+                  <div className="mb-3 flex w-full justify-center">
                     <p
-                      className="font-alfa-slab-one text-[120px] text-blue-600 animate-text-win cursor-default select-none hover:pause-animation hover:cursor-pointer hover:text-blue-700"
+                      className="hover:pause-animation animate-text-win cursor-default select-none font-alfa-slab-one text-[120px] text-blue-600 hover:cursor-pointer hover:text-blue-700"
                       style={{ WebkitTextStroke: "6px rgba(0,0,0,1)" }}
                       onClick={executeGame}
                     >
@@ -509,7 +509,7 @@ const Stadium = ({
                   </div>
                 )}
               <div
-                className="w-12 h-12 relative self-end hover:cursor-pointer"
+                className="relative size-12 self-end hover:cursor-pointer"
                 onClick={() => {
                   if (isSoundMuted) {
                     setIsSoundMuted(!isSoundMuted);
@@ -567,9 +567,7 @@ const Stadium = ({
             </div>
           )} */}
         {betResult === null || ballDirection === "" ? (
-          <div
-            className={`absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]`}
-          >
+          <div className={`absolute bottom-[-58px] right-[519px] size-[160px]`}>
             <Image
               src="/assets/images/field/ball.svg"
               className={``}
@@ -584,7 +582,7 @@ const Stadium = ({
         ) : (
           <>
             {ballDirection === "right" && goalInStatus === "success" && (
-              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] size-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-right-success`}
@@ -599,7 +597,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "left" && goalInStatus === "success" && (
-              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] size-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-left-success`}
@@ -614,7 +612,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "right" && goalInStatus === "failed" && (
-              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] size-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-right-failed`}
@@ -629,7 +627,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "left" && goalInStatus === "failed" && (
-              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] size-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-left-failed`}
@@ -676,14 +674,14 @@ const Stadium = ({
       )}
 
       {isGameLoading && (
-        <div className="w-full h-full absolute flex justify-center items-end bg-transparent z-10 pb-[160px]">
+        <div className="absolute z-10 flex size-full items-end justify-center bg-transparent pb-[160px]">
           <div className="relative">
             <Progress
               value={gameProgress}
-              className="w-[224px] h-10 !transition-[width] !duration-1000"
+              className="h-10 w-[224px] !transition-[width] !duration-1000"
             />
             <div
-              className="w-[56px] h-[56px] absolute top-[-12px] transition-[left] duration-1000"
+              className="absolute top-[-12px] size-[56px] transition-[left] duration-1000"
               style={{
                 left: `${loadingBallPositionX}px`,
               }}
@@ -703,7 +701,7 @@ const Stadium = ({
               />
             </div>
             <div className="flex justify-center pt-3">
-              <p className="text-sm font-medium animate-pulse">Loading...</p>
+              <p className="animate-pulse text-sm font-medium">Loading...</p>
             </div>
           </div>
         </div>
