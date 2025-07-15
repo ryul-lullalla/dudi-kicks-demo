@@ -7,23 +7,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import confetti, { Options as ConfettiOptions } from "canvas-confetti";
 
-import Image from "next/image";
 import { Separator } from "../ui/separator";
 
 import { BetForm } from "@/app/game/page";
 import { math } from "@/lib/math";
-import Realistic from "react-canvas-confetti/dist/presets/realistic";
-import { formatCommas } from "@/lib/number/format";
-import Link from "next/link";
+import { decomma, formatCommas } from "@/lib/number/format";
 import { ExternalLink } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useIntervalEffect } from "@react-hookz/web";
+import useChain from "@/hooks/blockchain/useChain";
 
 interface Props {
   gameResult: boolean;
   formStates: BetForm;
   odds: string;
   rewards: string;
+  betResultTxHash?: `0x${string}`;
   onModalCloseCallback: () => void;
 }
 
@@ -31,12 +30,19 @@ export const GameResultModal: React.FC<Props> = ({
   gameResult,
   formStates,
   odds,
+  betResultTxHash,
   rewards,
   onModalCloseCallback,
 }) => {
   const confettiRef = useRef<NodeJS.Timeout>();
-  const betAmount = formatCommas(math(formStates.betAmount).value(6), 6);
-  const total = formatCommas(math(odds).mul(betAmount).value(6), 6);
+  const betAmount = formatCommas(
+    math(decomma(formStates.betAmount)).value(6),
+    6,
+  );
+  const total = formatCommas(math(odds).mul(decomma(betAmount)).value(6), 6);
+
+  const { explorerUrl } = useChain();
+
 
   const result = !!gameResult ? "win" : "lose";
 
@@ -44,7 +50,8 @@ export const GameResultModal: React.FC<Props> = ({
 
   const goToExplorer = () => {
     window.open(
-      "https://kromascan.com/address/0xD7F72F7e892549aFFCC12FB05796De69ec813e3F#tokentxns",
+      `${explorerUrl}/tx/${betResultTxHash}`,
+      // "https://kromascan.com/address/0xD7F72F7e892549aFFCC12FB05796De69ec813e3F#tokentxns",
       "_blank",
     );
   };
@@ -260,14 +267,10 @@ export const GameResultModal: React.FC<Props> = ({
                 >
                   Play again
                 </AlertDialogAction>
-                {!!gameResult && (
-                  <div
-                    className="flex cursor-pointer items-center"
-                    // onClick={goToExplorer}
-                  >
+                {!!betResultTxHash && (
+                  <div className="flex cursor-pointer items-center">
                     <div
                       className="flex gap-2 items-center w-full justify-center rounded-[6px] bg-transparent py-2 px-4 "
-                      // className="flex gap-2 items-center w-fit rounded-[6px]"
                       onClick={goToExplorer}
                     >
                       <p className="text-xs text-zinc-50 font-sm border-none cursor-pointer text-center">

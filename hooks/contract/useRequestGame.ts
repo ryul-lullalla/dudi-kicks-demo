@@ -24,7 +24,8 @@ export const useRequestGame = ({
   onProcessSuccessCallback: (progress: number) => void;
 }) => {
   const { data: estimatedPrice } = useEstimateFeesPerGas();
-  const { writeContractAsync } = useWriteContract();
+  const { data: kickTxHash, writeContractAsync } = useWriteContract();
+
   const config = useConfig();
 
   const requestGameInfoById = async (set: number, gameId: number) => {
@@ -203,6 +204,7 @@ export const useRequestGame = ({
   };
 
   return {
+    kickTxHash,
     requestGame,
   };
 };

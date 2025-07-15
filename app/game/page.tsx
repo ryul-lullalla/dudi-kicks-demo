@@ -135,7 +135,7 @@ export default function GamePage() {
     setGameProgress(progress);
   };
 
-  const { requestGame } = useRequestGame({
+  const { requestGame, kickTxHash } = useRequestGame({
     onProcessSuccessCallback: changeProgressPrecentage,
   });
 
@@ -258,7 +258,6 @@ export default function GamePage() {
         direction: false,
         onProcessStartsCallback: changeGameLoadingStatus,
       });
-
       if (gameResult?.length && gameResult?.length > 0) {
         const gameSummary = gameResult[2];
         setBetResult(!!gameSummary?.isWin);
@@ -295,6 +294,7 @@ export default function GamePage() {
             <Stadium
               // betResult={true}
               betResult={betResult}
+              betResultTxHash={kickTxHash}
               odds={predictionOdds}
               formStates={formStates}
               relativeWidth={measurements?.width || 0}

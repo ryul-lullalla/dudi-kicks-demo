@@ -2,10 +2,7 @@ import { BetForm } from "@/app/game/page";
 import { useEffect, useRef, useState } from "react";
 import { GameResultModal } from "../modal/GameResultModal";
 import Image from "next/image";
-import Realistic from "react-canvas-confetti/dist/presets/realistic";
 import { Progress } from "../ui/progress";
-import LeftGoallyPepe from "../../../public/assets/images/player/left-goally-pepe.svg";
-import RightGoallyPepe from "../../../public/assets/images/player/right-goally-pepe.svg";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 export function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
@@ -20,6 +17,7 @@ type Props = {
   isFormNotValid: boolean;
   gameProgress: number;
   rewards: string;
+  betResultTxHash?: `0x${string}`;
   executeGame: () => void;
   onGameEndsCallback: () => void;
 };
@@ -33,6 +31,7 @@ const Stadium = ({
   isFormNotValid,
   gameProgress,
   rewards,
+  betResultTxHash,
   executeGame,
   onGameEndsCallback,
 }: Props) => {
@@ -501,10 +500,9 @@ const Stadium = ({
                 betResult === null && (
                   <div className="w-full mb-3 flex justify-center">
                     <p
-                      className="font-alfa-slab-one text-[120px] text-primary animate-text-win cursor-default select-none
-"
+                      className="font-alfa-slab-one text-[120px] text-blue-600 animate-text-win cursor-default select-none hover:pause-animation hover:cursor-pointer hover:text-blue-700"
                       style={{ WebkitTextStroke: "6px rgba(0,0,0,1)" }}
-                      // onClick={executeGame}
+                      onClick={executeGame}
                     >
                       PLAY
                     </p>
@@ -666,6 +664,7 @@ const Stadium = ({
         <>
           {betResult !== null && (
             <GameResultModal
+              betResultTxHash={betResultTxHash}
               gameResult={betResult}
               formStates={formStates}
               odds={odds}
