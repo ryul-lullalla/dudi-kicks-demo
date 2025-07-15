@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 import { useEffect } from "react";
 import { RefreshCcw } from "lucide-react";
-import { useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { useConnect, useDisconnect, useReconnect, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { CHAIN_INFO } from "@/constant/chains";
 
@@ -46,6 +46,7 @@ export default function Nav() {
   const { switchChain } = useSwitchChain();
 
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
+  const { reconnect } = useReconnect();
   const { isConnected, walletAddress, isInValidNetwork } = useAccount();
 
   const requestWalletConnect = () => {
@@ -60,6 +61,10 @@ export default function Nav() {
       }, 300);
     }
   }, [isConnected, isInValidNetwork, pathname]);
+
+  useEffect(() => {
+    reconnect();
+  }, []);
 
   return (
     <header className="sticky top-0 bg-background px-4 md:px-6 border-b z-50">

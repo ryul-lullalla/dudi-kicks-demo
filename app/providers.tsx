@@ -22,6 +22,29 @@ export function Providers(props: { children: ReactNode }) {
 
   if (!isClient) return null;
 
+  const getDefaultDomain = () => {
+    switch (process.env.NODE_ENV) {
+      case "development":
+        return "http://localhost:3000";
+      case "production":
+        return process.env.NEXT_PUBLIC_URL;
+      case "test":
+        return "http://localhost:3000";
+      default:
+        return "http://localhost:3000";
+    }
+  };
+
+  const defaultDomain =
+    process.env.NODE_ENV === "production"
+      ? "http://localhost:3000"
+      : process.env.NEXT_PUBLIC_URL;
+
+  console.log({
+    defaultDomain,
+    iconUrl: process.env.NEXT_PUBLIC_ICON_URL,
+  });
+
   return (
     <>
       {/* <Web3Provider> */}

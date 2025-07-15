@@ -1,11 +1,15 @@
 import { CHAIN_ID, CHAIN_INFO } from "@/constant/chains";
 // import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useMemo } from "react";
-import { useBalance } from "wagmi";
+import { useBalance, useConnections } from "wagmi";
 import { useAccount as useAccountWagmi } from "wagmi";
 
 export const useAccount = () => {
-  const { isConnected, address } = useAccountWagmi();
+  const { isConnected, status, isReconnecting, isDisconnected, address } =
+    useAccountWagmi();
+  console.log({ isConnected, status, isReconnecting, isDisconnected });
+  const connections = useConnections();
+  console.log({ connections });
 
   const balance = useBalance({
     address: address,

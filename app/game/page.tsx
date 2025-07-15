@@ -103,6 +103,7 @@ export default function GamePage() {
 
   const { chain, isConnected, isInValidNetwork } = useAccount();
   const config = useConfig();
+  console.log({ config });
 
   const { isInvalidNetwork } = useChain();
 
@@ -113,12 +114,6 @@ export default function GamePage() {
     // width,
     // height: popoverContentHeight,
   } = useDimensions();
-
-  const { allowanceData: KPTokenAllowance = BigInt(0), refetchAllowance } =
-    useAllowance({
-      contractAddress: DUDI_KICKS_CONTRACT_ADDRESS.game,
-      tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
-    });
 
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
   // const {
@@ -179,15 +174,15 @@ export default function GamePage() {
   const prediction = watch("prediction");
   const betAmount = watch("betAmount");
 
-  const {
-    approveExcute,
-    shouldAllowTokenMore: shouldAllowKPMore,
-    isApproving,
-  } = useApproveToken({
-    contractAddress: DUDI_KICKS_CONTRACT_ADDRESS.game,
-    tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
-    tokenAmount: decomma(betAmount),
-  });
+  // const {
+  //   approveExcute,
+  //   shouldAllowTokenMore: shouldAllowKPMore,
+  //   isApproving,
+  // } = useApproveToken({
+  //   contractAddress: DUDI_KICKS_CONTRACT_ADDRESS.game,
+  //   tokenAddress: KLEVA_TOKEN_ADDRESS[CHAIN_INFO.id],
+  //   tokenAmount: decomma(betAmount),
+  // });
 
   const changeGameLoadingStatus = (status: boolean) => {
     setIsGameLoading(status);
@@ -412,17 +407,18 @@ export default function GamePage() {
                       <div className="flex flex-col gap-[2px]">
                         <Link
                           className="flex gap-1 items-center justify-between cursor-pointer"
-                          href={
-                            "https://kromascan.com/address/0xa999d848655c33b3b63eC1564F426565252c3e9f"
-                          }
+                          // href={
+                          //   "https://kromascan.com/address/0xa999d848655c33b3b63eC1564F426565252c3e9f"
+                          // }
+                          href={`${CHAIN_INFO.blockExplorers.default.url}/address/${DUDI_KICKS_CONTRACT_ADDRESS.game}`}
                           target="_blank"
                         >
                           <p className="text-xs font-medium text-zince-300">
                             Gaming Contract
                           </p>
-                          <ExternalLink size={16} className="text-gray-900" />
+                          <ExternalLink size={16} className="text-zinc-50" />
                         </Link>
-                        <Link
+                        {/* <Link
                           className="flex gap-1 items-center justify-between cursor-pointer"
                           href={
                             "https://kromascan.com/address/0x589b45F2c65796fc60b1b61802B10d7C7de86cc7"
@@ -432,8 +428,8 @@ export default function GamePage() {
                           <p className="text-xs font-medium text-zince-300">
                             VRF Contract
                           </p>
-                          <ExternalLink size={16} className="text-gray-900" />
-                        </Link>
+                          <ExternalLink size={16} className="text-zinc-50" />
+                        </Link> */}
                         {/* <Link
                         className="flex gap-1 items-center justify-between cursor-pointer"
                         href={""}
@@ -690,41 +686,6 @@ export default function GamePage() {
                           </p>
                         </div>
                       </Button>
-                    ) : !!prediction &&
-                      !!!invalidTokenAmount &&
-                      !!shouldAllowKPMore ? (
-                      isApproving ? (
-                        <Button
-                          type="submit"
-                          className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground`}
-                          // onClick={startKick}
-                          disabled={true}
-                        >
-                          <div className="flex items-center gap-2">
-                            <LoadingSpinner size={20} />
-                            <p className="text-sm font-semibold leading-5">
-                              Approving...
-                            </p>
-                          </div>
-                        </Button>
-                      ) : (
-                        <Button
-                          type="submit"
-                          className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
-                            !!prediction &&
-                            !!!invalidTokenAmount &&
-                            "animate-start-alert"
-                          }`}
-                          onClick={approveExcute}
-                          disabled={
-                            !isFormFilled ||
-                            !!invalidTokenAmount ||
-                            isFormDisabled
-                          }
-                        >
-                          Approve KP
-                        </Button>
-                      )
                     ) : (
                       <Button
                         type="submit"
@@ -748,6 +709,63 @@ export default function GamePage() {
                       </Button>
                     )
                   ) : (
+                    // : !!prediction &&
+                    //   !!!invalidTokenAmount &&
+                    //   !!shouldAllowKPMore ? (
+                    //   isApproving ? (
+                    //     <Button
+                    //       type="submit"
+                    //       className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground`}
+                    //       // onClick={startKick}
+                    //       disabled={true}
+                    //     >
+                    //       <div className="flex items-center gap-2">
+                    //         <LoadingSpinner size={20} />
+                    //         <p className="text-sm font-semibold leading-5">
+                    //           Approving...
+                    //         </p>
+                    //       </div>
+                    //     </Button>
+                    //   ) : (
+                    //     <Button
+                    //       type="submit"
+                    //       className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
+                    //         !!prediction &&
+                    //         !!!invalidTokenAmount &&
+                    //         "animate-start-alert"
+                    //       }`}
+                    //       onClick={approveExcute}
+                    //       disabled={
+                    //         !isFormFilled ||
+                    //         !!invalidTokenAmount ||
+                    //         isFormDisabled
+                    //       }
+                    //     >
+                    //       Approve KP
+                    //     </Button>
+                    //   )
+                    // ) : (
+                    //   <Button
+                    //     type="submit"
+                    //     className={`text-sm font-semibold py-[10px] h-fit text-primary-foreground ${
+                    //       !!prediction &&
+                    //       !!!invalidTokenAmount &&
+                    //       "animate-start-alert"
+                    //     }`}
+                    //     onClick={startKick}
+                    //     disabled={
+                    //       !isFormFilled ||
+                    //       !!invalidTokenAmount ||
+                    //       isFormDisabled
+                    //     }
+                    //   >
+                    //     {!prediction
+                    //       ? "Select Prediction"
+                    //       : invalidTokenAmount
+                    //         ? "Invalid KP Amount"
+                    //         : "Shoot!"}
+                    //   </Button>
+                    // )
                     <Button
                       type="submit"
                       className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
