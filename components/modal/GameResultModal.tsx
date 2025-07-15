@@ -237,11 +237,11 @@ export const GameResultModal: React.FC<Props> = ({
                 </div>
                 <div className="w-full flex justify-between">
                   <p className="text-sm	font-semibold text-zinc-300">Entry</p>
-                  <p className="text-sm	font-semibold text-zinc-50">{`${betAmount} ETH`}</p>
+                  <p className="text-sm	font-semibold text-zinc-50">{`${betAmount} KP`}</p>
                 </div>
                 <div className="w-full flex justify-between">
                   <p className="text-sm	font-semibold text-zinc-300">Total</p>
-                  <p className="text-sm	font-semibold text-green-300">{`${total} ETH`}</p>
+                  <p className="text-sm	font-semibold text-zinc-50">{`${total} KP`}</p>
                 </div>
                 <Separator className="bg-zinc-700" />
                 <div className="w-full">
@@ -249,14 +249,14 @@ export const GameResultModal: React.FC<Props> = ({
                     <p className="text-sm	font-semibold text-zinc-300">
                       You Receive
                     </p>
-                    <p className="text-sm	font-semibold text-green-300">{`${rewards} ETH`}</p>
+                    <p className="text-sm	font-semibold text-zinc-50">{`${rewards} KP`}</p>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
                 <AlertDialogAction
                   onClick={() => onModalCloseCallback()}
-                  className="w-full text-zinc-900 text-sm font-semibold"
+                  className="w-full text-primary-foreground text-sm font-semibold"
                 >
                   Play again
                 </AlertDialogAction>

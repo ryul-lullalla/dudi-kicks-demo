@@ -10,7 +10,7 @@ export const ETH_TOKEN_ADDRESS = "0x4200000000000000000000000000000000000001";
 
 export const KLEVA_TOKEN_ADDRESS: Record<number, `0x${string}`> = {
   [baseMainnet.id]: "0x0000000000000000000000000000000000000000",
-  [baseTestnet.id]: "0x8996C3E1Dbb1B1e0965aa398Af7dDe20e12B390C",
+  [baseTestnet.id]: "0xbFC99fbDD8F18b58796ee8398106325721721015",
 };
 
 export const USDC_TOKEN_ADDRESS: Record<number, `0x${string}`> = {

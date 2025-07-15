@@ -26,6 +26,7 @@ export const useRequestGame = ({
 }) => {
   const { data: estimatedPrice } = useEstimateFeesPerGas();
   const { writeContractAsync } = useWriteContract();
+  const config = useConfig();
 
   const requestGameInfoById = async (set: number, gameId: number) => {
     if (set === 0) {
@@ -52,47 +53,52 @@ export const useRequestGame = ({
         message: "no game result made",
       });
     }
-    const gameInfo: readonly [
-      `0x${string}`,
-      {
-        isSuccess: boolean;
-        direction: boolean;
-        haveDirection: boolean;
-      },
-      {
-        isSuccess: boolean;
-        direction: boolean;
-        isWin: boolean;
-      },
-      `0x${string}`,
-      bigint,
-      bigint,
-      bigint,
-      bigint,
-      bigint,
-    ] = await new Promise((resolve) => {
-      setTimeout(async () => {
-        const uintGameId = BigInt(gameId);
-        const gameResult = await readContract(wagmiConfig, {
-          abi: DudiKicksABI,
-          address: DUDI_KICKS_CONTRACT_ADDRESS.DUDI_KICKS,
-          functionName: "kickInfo",
-          args: [uintGameId],
-        });
+    try {
+      const gameInfo: readonly [
+        `0x${string}`,
+        {
+          isSuccess: boolean;
+          direction: boolean;
+          haveDirection: boolean;
+        },
+        {
+          isSuccess: boolean;
+          direction: boolean;
+          isWin: boolean;
+        },
+        `0x${string}`,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+      ] = await new Promise((resolve) => {
+        setTimeout(async () => {
+          const uintGameId = BigInt(gameId);
+          const gameResult = await readContract(config, {
+            abi: DudiKicksABI,
+            address: DUDI_KICKS_CONTRACT_ADDRESS.game,
+            functionName: "kickInfo",
+            args: [uintGameId],
+          });
+          console.log({ gameResult });
 
-        return resolve(gameResult);
-      }, 3000);
-    });
+          return resolve(gameResult);
+        }, 3000);
+      });
 
-    if (
-      gameInfo &&
-      gameInfo.length > 0 &&
-      (gameInfo[gameInfo?.length - 1] as bigint) > 0
-    ) {
-      return gameInfo;
+      if (
+        gameInfo &&
+        gameInfo.length > 0 &&
+        (gameInfo[gameInfo?.length - 1] as bigint) > 0
+      ) {
+        return gameInfo;
+      }
+
+      return await requestGameInfoById(set + 1, gameId);
+    } catch (getGameInfoError) {
+      console.log({ getGameInfoError });
     }
-
-    return await requestGameInfoById(set + 1, gameId);
   };
 
   const requestGame = async ({
@@ -126,7 +132,7 @@ export const useRequestGame = ({
           },
           // tokenAddress,
         ],
-        value: tokenAmount,
+        // value: tokenAmount,
         // gas: estimatedGas,
         // gasPrice: estimatedPrice?.gasPrice!,
         // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
@@ -135,14 +141,14 @@ export const useRequestGame = ({
         maxPriorityFeePerGas: estimatedPrice?.maxPriorityFeePerGas!,
       });
 
-      //   0.0000000000000000001
-
+      console.log({ gameTxHash });
       if (gameTxHash) {
         onProcessSuccessCallback(25);
-        const txReceipt = await waitForTransactionReceipt(wagmiConfig, {
+        const txReceipt = await waitForTransactionReceipt(config, {
           hash: gameTxHash,
           pollingInterval: 3_000,
         });
+        console.log({ txReceipt });
 
         const desiredTopic: `0x${string}` =
           "0x48c1fa88efb58b5406aa1515fb0a88931d67b5c3b61fd704775d7367af84fa28";

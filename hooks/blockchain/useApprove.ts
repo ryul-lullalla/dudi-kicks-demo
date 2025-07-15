@@ -83,7 +83,6 @@ const useApproveToken = ({
   //     new Big(allowanceData?.toString()).lt(parsedAmount.toString());
 
   const requestTokenApproval = useCallback(async () => {
-    console.log(data?.request, tokenAddress);
     //   if (data?.request && tokenAddress) {
     if (tokenAddress) {
       setIsApproving(true);
@@ -106,7 +105,10 @@ const useApproveToken = ({
         console.log(approvalTxHash, txReceipt);
         try {
           const upToDateAllowanceData = await allowanceRefetch();
-          const upToDateAllowance = new Big(upToDateAllowanceData?.toString());
+          console.log({ upToDateAllowanceData });
+          const upToDateAllowance = new Big(
+            upToDateAllowanceData?.data?.toString() || "0",
+          );
           console.log(upToDateAllowance, parsedAmount);
           if (upToDateAllowance.gte(parsedAmount.toString())) {
             setShouldAllowTokenMore(false);
@@ -140,13 +142,17 @@ const useApproveToken = ({
     }
     const bigTokenAmount = new Big(tokenAmount || 0);
     const parsedAmount = parseUnits(bigTokenAmount.toString(), decimals);
-    const shouldAllowTokenMore =
-      new Big(bigTokenAmount?.toString()).eq(0) ||
-      new Big((allowanceData || BigInt(0)).toString()).lt(
-        parsedAmount.toString(),
-      );
-    if (!!shouldAllowTokenMore) {
-      setShouldAllowTokenMore(shouldAllowTokenMore);
+
+    if (bigTokenAmount.eq(0)) {
+      setShouldAllowTokenMore(false);
+      return;
+    }
+
+    const isAmountLTAllowance = new Big(
+      (allowanceData || BigInt(0)).toString(),
+    ).lt(parsedAmount.toString());
+    if (isAmountLTAllowance !== shouldAllowTokenMore) {
+      setShouldAllowTokenMore(isAmountLTAllowance);
     }
   }, [tokenAmount, isConnected, isInValidNetwork]);
 

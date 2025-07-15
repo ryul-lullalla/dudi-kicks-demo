@@ -220,6 +220,12 @@ export default function GamePage() {
   }, [betAmount, klevaPointToken]);
 
   const hasViolatedMinimumAmount = useMemo(() => {
+    // if (decomma(betAmount) === "") {
+    //   return true;
+    // }
+    // if (math(decomma(betAmount)).eq(0)) {
+    //   return false;
+    // }
     if (math(decomma(betAmount)).lt(MINIMUM_BET_AMOUNT)) {
       return true;
     }
@@ -615,7 +621,7 @@ export default function GamePage() {
                       </div>
                       <div className="flex gap-2 justify-between items-center">
                         <p className="text-xs font-medium	 text-zinc-400">
-                          {`${isConnected ? klevaPointToken.formatted : "-"} KP`}
+                          {`${isConnected ? formatAbbreviated(klevaPointToken.eth) : "-"} KP`}
                         </p>
                         <div className="flex gap-2">
                           <p
@@ -734,11 +740,11 @@ export default function GamePage() {
                           isFormDisabled
                         }
                       >
-                        {invalidTokenAmount
-                          ? "Invalid KP Amount"
-                          : !!prediction
-                            ? "Shoot!"
-                            : "Select Prediction"}
+                        {!prediction
+                          ? "Select Prediction"
+                          : invalidTokenAmount
+                            ? "Invalid KP Amount"
+                            : "Shoot!"}
                       </Button>
                     )
                   ) : (

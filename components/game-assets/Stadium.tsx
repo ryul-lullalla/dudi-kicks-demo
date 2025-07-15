@@ -570,7 +570,7 @@ const Stadium = ({
           )} */}
         {betResult === null || ballDirection === "" ? (
           <div
-            className={`absolute bottom-[-55px] right-[519px] w-[160px] h-[160px]`}
+            className={`absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]`}
           >
             <Image
               src="/assets/images/field/ball.svg"
@@ -586,7 +586,7 @@ const Stadium = ({
         ) : (
           <>
             {ballDirection === "right" && goalInStatus === "success" && (
-              <div className="absolute bottom-[-55px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-right-success`}
@@ -601,7 +601,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "left" && goalInStatus === "success" && (
-              <div className="absolute bottom-[-55px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-left-success`}
@@ -616,7 +616,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "right" && goalInStatus === "failed" && (
-              <div className="absolute bottom-[-55px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-right-failed`}
@@ -631,7 +631,7 @@ const Stadium = ({
               </div>
             )}
             {ballDirection === "left" && goalInStatus === "failed" && (
-              <div className="absolute bottom-[-55px] right-[519px] w-[160px] h-[160px]">
+              <div className="absolute bottom-[-58px] right-[519px] w-[160px] h-[160px]">
                 <Image
                   src="/assets/images/field/ball.svg"
                   className={`animate-kick-left-failed`}
