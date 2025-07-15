@@ -9,7 +9,7 @@ import confetti, { Options as ConfettiOptions } from "canvas-confetti";
 
 import { Separator } from "../ui/separator";
 
-import { BetForm } from "@/app/game/page";
+import { BetForm } from "@/app/bet/page";
 import { math } from "@/lib/math";
 import { decomma, formatCommas } from "@/lib/number/format";
 import { ExternalLink } from "lucide-react";
@@ -42,7 +42,6 @@ export const GameResultModal: React.FC<Props> = ({
   const total = formatCommas(math(odds).mul(decomma(betAmount)).value(6), 6);
 
   const { explorerUrl } = useChain();
-
 
   const result = !!gameResult ? "win" : "lose";
 

@@ -5,24 +5,11 @@ import {
   useAddFrame,
   useOpenUrl,
 } from "@coinbase/onchainkit/minikit";
-import {
-  Name,
-  Identity,
-  Address,
-  Avatar,
-  EthBalance,
-} from "@coinbase/onchainkit/identity";
-import {
-  ConnectWallet,
-  Wallet,
-  WalletDropdown,
-  WalletDropdownDisconnect,
-} from "@coinbase/onchainkit/wallet";
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { Button } from "./components/DemoComponents";
-import { Icon } from "./components/DemoComponents";
-import { Home } from "./components/DemoComponents";
-import { Features } from "./components/DemoComponents";
+
+import { useEffect, useState } from "react";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();
@@ -38,79 +25,152 @@ export default function App() {
     }
   }, [setFrameReady, isFrameReady]);
 
-  const handleAddFrame = useCallback(async () => {
-    const frameAdded = await addFrame();
-    setFrameAdded(Boolean(frameAdded));
-  }, [addFrame]);
-
-  const saveFrameButton = useMemo(() => {
-    if (context && !context.client.added) {
-      return (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleAddFrame}
-          className="text-[var(--app-accent)] p-4"
-          icon={<Icon name="plus" size="sm" />}
-        >
-          Save DudiKicks
-        </Button>
-      );
-    }
-
-    if (frameAdded) {
-      return (
-        <div className="flex items-center space-x-1 text-sm font-medium text-[#0052FF] animate-fade-out">
-          <Icon name="check" size="sm" className="text-[#0052FF]" />
-          <span>Saved</span>
-        </div>
-      );
-    }
-
-    return null;
-  }, [context, frameAdded, handleAddFrame]);
-
   return (
-    <div className="flex flex-col min-h-screen font-sans text-[var(--app-foreground)] mini-app-theme from-[var(--app-background)] to-[var(--app-gray)]">
-      <div className="w-full max-w-md mx-auto px-4 py-3">
-        <header className="flex justify-between items-center mb-3 h-11">
-          <div>
-            <div className="flex items-center space-x-2">
-              <Wallet className="z-10">
-                <ConnectWallet>
-                  <Name className="text-inherit" />
-                </ConnectWallet>
-                <WalletDropdown>
-                  <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-                    <Avatar />
-                    <Name />
-                    <Address />
-                    <EthBalance />
-                  </Identity>
-                  <WalletDropdownDisconnect />
-                </WalletDropdown>
-              </Wallet>
-            </div>
-          </div>
-          <div>{saveFrameButton}</div>
-        </header>
-
-        <main className="flex-1">
-          {activeTab === "home" && <Home setActiveTab={setActiveTab} />}
-          {activeTab === "features" && <Features setActiveTab={setActiveTab} />}
-        </main>
-
-        <footer className="mt-2 pt-4 flex justify-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-[var(--ock-text-foreground-muted)] text-xs"
-            onClick={() => openUrl("https://base.org/builders/minikit")}
-          >
-            Built on Base with MiniKit
-          </Button>
-        </footer>
-      </div>
+    <div className="flex w-full py-6 px-4">
+      <Tabs defaultValue="earn" className="w-full">
+        <TabsList className="w-full flex justify-between h-10">
+          <TabsTrigger className="w-1/2 h-8" value="earn">
+            Earn
+          </TabsTrigger>
+          <TabsTrigger className="w-1/2 h-8" value="buy" disabled>
+            Buy
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="earn" className="mt-6">
+          <Card className="bg-zinc-800 border-zinc-700">
+            <CardHeader>
+              <CardTitle className="text-xl text-zinc-50">
+                Post and Earn KP!
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="flex w-full flex-col gap-6">
+                <div className="flex flex-row w-full gap-4 ">
+                  <div>
+                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                      <p>Step 1</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full">
+                    <div className="text-zinc-100 text-base font-bol leading-7">
+                      How to Participate
+                    </div>
+                    <div>
+                      <div className="text-sm leading-6 flex whitespace-pre-wrap">
+                        {`1. Go to `}
+                        <p className="underline font-bold hover:cursor-pointer">
+                          /Kleva
+                        </p>
+                      </div>
+                      <div className="whitespace-pre-wrap	 text-sm leading-6">
+                        2. Pick one of the official threads below and cast your
+                        tips, stories,or reviews!
+                      </div>
+                    </div>
+                    <div>
+                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
+                        <p className="text-sm leading-5 font-semibold">
+                          ✈️ Korea Travel Tips
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
+                        <p className="text-sm leading-5 font-semibold">
+                          🛍️ Product Reviews
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
+                        <p className="text-sm leading-5 font-semibold">
+                          👶 Parenting Hacks
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div className=" border border-zinc-700 py-1 w-full rounded-md flex items-center justify-center px-2">
+                        <p className="text-sm leading-5 font-semibold">
+                          🧴 Must-Buy Items in Korea
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row w-full gap-4 ">
+                  <div>
+                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                      <p>Step 2</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full">
+                    <div className="text-zinc-100 text-base font-bol leading-7">
+                      {`Don't Forget to Tag @klevaAI`}
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex items-center justify-center h-6">
+                        &#x2022;
+                      </div>
+                      <div className="text-sm leading-6 whitespace-pre-wrap">
+                        Make sure to include
+                        <span className="font-bold hover:cursor-pointer">
+                          {` @klevaAI `}
+                        </span>
+                        {` in your post so we can find and review it!`}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-row w-full gap-4 ">
+                  <div>
+                    <div className="bg-primary p-1 rounded-md flex items-center justify-center w-[50px] text-zinc-50 font-normal leading-5 text-sm">
+                      <p>Step 3</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full">
+                    <div className="text-zinc-100 text-base font-bol leading-7">
+                      Earn KP Automatically
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex items-center justify-center h-6">
+                        &#x2022;
+                      </div>
+                      <div className="text-sm leading-6 whitespace-pre-wrap">
+                        Every week, your eligible posts will be reviewed and
+                        rewarded with KP (Kleva Points) automatically.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        {/* <TabsContent value="password">
+          <Card>
+            <CardHeader>
+              <CardTitle>Password</CardTitle>
+              <CardDescription>
+                Change your password here. After saving, you&apos;ll be logged
+                out.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="tabs-demo-current">Current password</Label>
+                <Input id="tabs-demo-current" type="password" />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="tabs-demo-new">New password</Label>
+                <Input id="tabs-demo-new" type="password" />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button>Save password</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent> */}
+      </Tabs>
     </div>
   );
 }

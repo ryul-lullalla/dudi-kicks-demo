@@ -65,7 +65,7 @@ export default function Nav() {
   }, [isConnected]);
 
   return (
-    <header className="sticky top-0 bg-background px-4 md:px-6 border-b z-50">
+    <header className="sticky top-0 bg-background px-4 py-3 md:px-6 border-b z-50">
       <section className="max-w-[1260px] mx-auto overflow-hidden flex h-16 items-center gap-4">
         <nav className="hidden flex-col gap-6 text-lg font-medium sm:flex sm:flex-row sm:items-center sm:gap-5 sm:text-sm lg:gap-6">
           <Link href="/game" className="w-[71px] h-10">

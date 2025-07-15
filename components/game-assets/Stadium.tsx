@@ -1,4 +1,4 @@
-import { BetForm } from "@/app/game/page";
+import { BetForm } from "@/app/bet/page";
 import { useEffect, useRef, useState } from "react";
 import { GameResultModal } from "../modal/GameResultModal";
 import Image from "next/image";
