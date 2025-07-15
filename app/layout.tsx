@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import Nav from "@/components/layout/Nav";
+import { MainLayout } from "@/components/layout/main-layout";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
             type: "launch_frame",
             name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
             url: URL,
-            splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE,
+            splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
             splashBackgroundColor:
               process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
           },
@@ -44,7 +45,7 @@ export default function RootLayout({
       <body className="bg-background">
         <Providers>
           <Nav />
-          <RootLayout>{children}</RootLayout>
+          <MainLayout>{children}</MainLayout>
         </Providers>
       </body>
     </html>

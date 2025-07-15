@@ -4,11 +4,10 @@ export default function GamePageLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="max-w-[1260px] mx-auto overflow-hidden z-10 my-2 sm:my-10 p-4 xl:p-0">
-      {/* <div className="grid grid-cols-7 gap-8 flex-col xl:flex-row overflow-hidden z-20"> */}
-      <div className="flex gap-8 flex-col lg:flex-row overflow-hidden z-20 w-full">
-        {children}
-      </div>
-    </section>
+    // <section className="max-w-[1260px] mx-auto overflow-hidden z-10 my-2 sm:my-10 p-4 xl:p-0">
+    <div className="flex gap-8 flex-col lg:flex-row overflow-hidden z-20 w-full">
+      {children}
+    </div>
+    // </section>
   );
 }
