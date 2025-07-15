@@ -1,4 +1,4 @@
-import "@coinbase/onchainkit/styles.css";
+// import "@coinbase/onchainkit/styles.css";
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
