@@ -8,9 +8,8 @@ import {
 } from "@wagmi/core";
 import { readContract } from "@wagmi/core";
 
-import { writeContract, WriteContractErrorType } from "@wagmi/core";
+import { WriteContractErrorType } from "@wagmi/core";
 
-import { wagmiConfig } from "@/config/wagmi-config";
 import {
   useConfig,
   useWriteContract,
@@ -81,7 +80,6 @@ export const useRequestGame = ({
             functionName: "kickInfo",
             args: [uintGameId],
           });
-          console.log({ gameResult });
 
           return resolve(gameResult);
         }, 3000);
@@ -141,14 +139,12 @@ export const useRequestGame = ({
         maxPriorityFeePerGas: estimatedPrice?.maxPriorityFeePerGas!,
       });
 
-      console.log({ gameTxHash });
       if (gameTxHash) {
         onProcessSuccessCallback(25);
         const txReceipt = await waitForTransactionReceipt(config, {
           hash: gameTxHash,
           pollingInterval: 3_000,
         });
-        console.log({ txReceipt });
 
         const desiredTopic: `0x${string}` =
           "0x48c1fa88efb58b5406aa1515fb0a88931d67b5c3b61fd704775d7367af84fa28";

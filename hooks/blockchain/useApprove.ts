@@ -1,10 +1,7 @@
-import { parseEther, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import {
   useWriteContract,
   useSimulateContract,
-  //   useWaitForTransaction,
-  useWaitForTransactionReceipt,
-  useWalletClient,
   useConfig,
   useReadContract,
 } from "wagmi";
@@ -56,8 +53,6 @@ const useApproveToken = ({
     },
   });
 
-  console.log({ allowanceData });
-
   const {
     data,
     status: approveSimulationStatus,
@@ -72,8 +67,6 @@ const useApproveToken = ({
       enabled: !!contractAddress && !!tokenAddress && !!walletAddress,
     },
   });
-
-  console.log({ data, approveSimulationStatus, approveSimulationError });
 
   const { data: approveData, writeContractAsync: approveTokenApproval } =
     useWriteContract({});
@@ -102,24 +95,22 @@ const useApproveToken = ({
           hash: approvalTxHash,
           pollingInterval: 3_000,
         });
-        console.log(approvalTxHash, txReceipt);
+
         try {
           const upToDateAllowanceData = await allowanceRefetch();
-          console.log({ upToDateAllowanceData });
+
           const upToDateAllowance = new Big(
             upToDateAllowanceData?.data?.toString() || "0",
           );
-          console.log(upToDateAllowance, parsedAmount);
+
           if (upToDateAllowance.gte(parsedAmount.toString())) {
             setShouldAllowTokenMore(false);
           }
           setIsApproving(false);
         } catch (lookUpAllowanceError) {
-          console.log({ lookUpAllowanceError });
           setIsApproving(false);
         }
       } catch (error) {
-        console.log({ error });
         setIsApproving(false);
       } finally {
       }

@@ -12,19 +12,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Name,
-  Identity,
-  Address,
-  Avatar,
-  EthBalance,
-} from "@coinbase/onchainkit/identity";
-import {
-  ConnectWallet,
-  Wallet,
-  WalletDropdown,
-  WalletDropdownDisconnect,
-} from "@coinbase/onchainkit/wallet";
+
 import { useState, useMemo } from "react";
 
 import Stadium from "@/components/game-assets/Stadium";
@@ -32,7 +20,6 @@ import Stadium from "@/components/game-assets/Stadium";
 import { useForm } from "react-hook-form";
 
 import { Form, FormControl, FormField } from "@/components/ui/form";
-import Image from "next/image";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 
 import { Separator } from "@/components/ui/separator";
@@ -44,13 +31,11 @@ import {
   formatAbbreviated,
   formatCommas,
   formatCrypto,
-  nFormatter,
   trimZero,
 } from "@/lib/number/format";
 import { useRequestGame } from "@/hooks/contract/useRequestGame";
-import { useGetPoolStatus } from "@/hooks/contract/useGetPoolStatus";
 import { useMeasure } from "@react-hookz/web";
-import { validateInteger, validateNumber } from "@/lib/number/validate";
+import { validateInteger } from "@/lib/number/validate";
 import { formatEther } from "viem";
 import {
   Popover,
@@ -66,18 +51,12 @@ import {
 
 import useDimensions from "react-cool-dimensions";
 import Link from "next/link";
-import { DankKicksStats } from "@/components/dashboard/DankKicksStats";
 import { CHAIN_INFO } from "@/constant/chains";
-import { useBalance, useConfig } from "wagmi";
-import useChain from "@/hooks/blockchain/useChain";
+import { injected, useConnect } from "wagmi";
 import { useTokenBalance } from "@/hooks/blockchain/useTokenBalance";
 import { KLEVA_TOKEN_ADDRESS } from "@/constant/tokens";
 import { DUDI_KICKS_CONTRACT_ADDRESS } from "@/constant/contracts";
-import useAllowance from "@/hooks/blockchain/useAllowance";
-import Big from "big.js";
 import { Button } from "@/components/ui/button";
-import useApproveToken from "@/hooks/blockchain/useApprove";
-import { LoadingSpinner } from "@/components/loader/Spinner";
 
 export type BetForm = {
   prediction: string;
@@ -102,10 +81,8 @@ export default function GamePage() {
   const [gameRewards, setGameRewards] = useState<string>("0");
 
   const { chain, isConnected, isInValidNetwork } = useAccount();
-  const config = useConfig();
-  console.log({ config });
 
-  const { isInvalidNetwork } = useChain();
+  const { connect } = useConnect();
 
   const [measurements, ref] = useMeasure<HTMLDivElement>();
   // const [popoverRelative, popoeverRf] = useMeasure<HTMLDivElement>();
@@ -148,6 +125,11 @@ export default function GamePage() {
   //   data: dankPoolMaxLimit,
   //   // error: dankPoolQueryError,
   // } = useGetPoolStatus();
+
+  const requestWalletConnect = () => {
+    // openWallet();
+    connect({ connector: injected(), chainId: CHAIN_INFO.id });
+  };
 
   const changeProgressPrecentage = (progress: number) => {
     setGameProgress(progress);
@@ -769,7 +751,7 @@ export default function GamePage() {
                     <Button
                       type="submit"
                       className="text-sm font-semibold py-[10px] h-fit text-primary-foreground"
-                      // onClick={requestWalletConnect}
+                      onClick={requestWalletConnect}
                     >
                       <div className="flex gap-2 items-center">
                         <WalletIcon

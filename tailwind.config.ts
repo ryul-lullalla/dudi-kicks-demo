@@ -49,6 +49,11 @@ const config: Config = {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
         },
       },
       borderRadius: {
@@ -90,16 +95,28 @@ const config: Config = {
           },
         },
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
         wiggle: {
-          "0%, 100%": { transform: "rotate(-1deg)" },
-          "50%": { transform: "rotate(1deg)" },
+          "0%, 100%": {
+            transform: "rotate(-1deg)",
+          },
+          "50%": {
+            transform: "rotate(1deg)",
+          },
         },
         bounce: {
           "0%, 100%": {
@@ -120,8 +137,12 @@ const config: Config = {
           },
         },
         "moving-x": {
-          "0%, 100%": { transform: "translateX(-10%)" },
-          "50%": { transform: "translateX(10%)" },
+          "0%, 100%": {
+            transform: "translateX(-10%)",
+          },
+          "50%": {
+            transform: "translateX(10%)",
+          },
         },
         "move-right-end": {
           from: {
@@ -131,11 +152,6 @@ const config: Config = {
             transform: "translate(125px, -425px) rotate(-7200deg) scale(0.28)",
           },
         },
-        // "move-right-end": {
-        //   "100%": {
-        //     transform: "rotate(-360deg) translate(125px, -425px) scale(0.28)",
-        //   },
-        // },
         "move-left-end": {
           from: {
             transform: "translate(0%, 0%) rotate(0deg) scale(1)",
@@ -161,8 +177,6 @@ const config: Config = {
           },
         },
         "rotate-right": {
-          // "0%, 100%": { transform: "rotate(-360deg)" },
-          // "50%": { transform: "rotate(-180deg)" },
           from: {
             transform: "rotate(0deg)",
           },
@@ -305,7 +319,6 @@ const config: Config = {
             "text-shadow": "none",
           },
         },
-
         popping: {
           "0%": {
             transform: "translate(0px, 0px)",

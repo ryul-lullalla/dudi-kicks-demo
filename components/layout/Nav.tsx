@@ -4,16 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, TriangleAlert, Wallet } from "lucide-react";
+import { Wallet } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 // import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useAccount } from "@/hooks/blockchain/useAccount";
 import { useEffect } from "react";
-import { RefreshCcw } from "lucide-react";
 import { useConnect, useDisconnect, useReconnect, useSwitchChain } from "wagmi";
 import { injected } from "wagmi/connectors";
 import { CHAIN_INFO } from "@/constant/chains";
@@ -47,6 +44,7 @@ export default function Nav() {
 
   // const { open: openWallet, close: closeWallet } = useWeb3Modal();
   const { reconnect } = useReconnect();
+
   const { isConnected, walletAddress, isInValidNetwork } = useAccount();
 
   const requestWalletConnect = () => {
@@ -63,8 +61,8 @@ export default function Nav() {
   }, [isConnected, isInValidNetwork, pathname]);
 
   useEffect(() => {
-    reconnect();
-  }, []);
+    if (!isConnected) reconnect();
+  }, [isConnected]);
 
   return (
     <header className="sticky top-0 bg-background px-4 md:px-6 border-b z-50">
@@ -172,18 +170,10 @@ export default function Nav() {
             </Sheet> */}
             <div>
               {isConnected ? (
-                <Button
-                  className="py-[10px] px-6 text-zinc-900 h-fit"
-                  // onClick={() => openWallet()}
-                >
+                <Button className="py-[10px] px-6 text-primary-foreground h-fit">
                   <div className="flex gap-2 items-center">
-                    <Image
-                      src="/assets/icons/wallet-icon.svg"
-                      width={18}
-                      height={18}
-                      alt="wallet"
-                    />
-                    <p className="text-sm font-semibold leading-5">
+                    <Wallet size={18} className="text-primary-foreground" />
+                    <p className="text-sm font-semibold leading-5 ">
                       {`${walletAddress?.slice(0, 6)}...${walletAddress?.slice(
                         walletAddress.length - 4,
                         walletAddress.length,
@@ -197,12 +187,6 @@ export default function Nav() {
                   onClick={requestWalletConnect}
                 >
                   <div className="flex gap-2 items-center">
-                    {/* <Image
-                      src="/assets/icons/wallet-icon.svg"
-                      width={18}
-                      height={18}
-                      alt="wallet"
-                    /> */}
                     <Wallet size={18} className="text-primary-foreground" />
                     <p className="text-sm font-semibold leading-5 text-primary-foreground">
                       Wallet Connect
@@ -262,22 +246,11 @@ export default function Nav() {
 
               <div>
                 {isConnected ? (
-                  <Button
-                    className="py-[10px] px-6 text-zinc-900 h-fit"
-                    // onClick={() => openWallet()}
-                  >
+                  <Button className="py-[10px] px-6 text-primary-foreground h-fit">
                     <div className="flex gap-2 items-center">
-                      <Image
-                        src="/assets/icons/wallet-icon.svg"
-                        width={18}
-                        height={18}
-                        alt="wallet"
-                      />
-                      <p className="text-sm font-semibold leading-5">
-                        {`${walletAddress?.slice(
-                          0,
-                          6,
-                        )}...${walletAddress?.slice(
+                      <Wallet size={18} className="text-primary-foreground" />
+                      <p className="text-sm font-semibold leading-5 ">
+                        {`${walletAddress?.slice(0, 6)}...${walletAddress?.slice(
                           walletAddress.length - 4,
                           walletAddress.length,
                         )}`}
@@ -285,6 +258,22 @@ export default function Nav() {
                     </div>
                   </Button>
                 ) : (
+                  // <Button
+                  //   className="py-[10px] px-6 text-primary-foreground h-fit"
+                  // >
+                  //   <div className="flex gap-2 items-center">
+                  //     <Wallet size={18} className="text-primary-foreground" />
+                  //     <p className="text-sm font-semibold leading-5">
+                  //       {`${walletAddress?.slice(
+                  //         0,
+                  //         6,
+                  //       )}...${walletAddress?.slice(
+                  //         walletAddress.length - 4,
+                  //         walletAddress.length,
+                  //       )}`}
+                  //     </p>
+                  //   </div>
+                  // </Button>
                   <Button
                     className="py-[10px] px-6 text-zinc-900 h-fit"
                     onClick={requestWalletConnect}

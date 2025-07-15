@@ -3,9 +3,7 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -37,8 +35,6 @@ export function LiveGameTable() {
       BigInt(0),
     ],
   });
-
-  console.log({ liveGameData, isLoading, error });
 
   const copy = [...(liveGameData || [])]?.filter((datum) => {
     if (datum.endedAt === BigInt(0)) {
