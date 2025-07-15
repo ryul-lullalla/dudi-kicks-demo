@@ -35,6 +35,18 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
     description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+    openGraph: {
+      title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
+      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+      url: URL,
+      images: [
+        {
+          url: process.env.NEXT_PUBLIC_APP_HERO_IMAGE || "",
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
     other: {
       "fc:frame": JSON.stringify({
         version: "next",
