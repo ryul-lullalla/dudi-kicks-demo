@@ -4,7 +4,7 @@ import { QueryClient } from "@tanstack/react-query";
 
 import { WagmiProvider } from "wagmi";
 import { useEffect, useState, type ReactNode } from "react";
-import { baseSepolia } from "wagmi/chains";
+import { base } from "wagmi/chains";
 import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
 import { wagmiConfig } from "@/config/wagmi-config";
 
@@ -33,7 +33,8 @@ export function Providers(props: { children: ReactNode }) {
       {/* <QueryClientProvider client={queryClient}> */}
       <MiniKitProvider
         apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-        chain={baseSepolia}
+        // chain={baseSepolia}
+        chain={base}
         config={{
           appearance: {
             mode: "auto",
