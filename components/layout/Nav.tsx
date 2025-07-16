@@ -65,15 +65,15 @@ export default function Nav() {
   }, [isConnected]);
 
   return (
-    <header className="sticky top-0 bg-background px-4 py-3 md:px-6 border-b z-50">
-      <section className="max-w-[1260px] mx-auto overflow-hidden flex h-16 items-center gap-4">
+    <header className="sticky top-0 z-50 border-b bg-background px-4 py-3 md:px-6">
+      <section className="mx-auto flex h-16 max-w-[1260px] items-center gap-4 overflow-hidden">
         <nav className="hidden flex-col gap-6 text-lg font-medium sm:flex sm:flex-row sm:items-center sm:gap-5 sm:text-sm lg:gap-6">
-          <Link href="/game" className="w-[71px] h-10">
+          <Link href="/game" className="h-10 w-[71px]">
             <Image
-              src="/assets/logo/logo_dudi.png"
+              src="/brand_logo.png"
               width={57}
               height={32}
-              alt="dank-kicks-logo"
+              alt="doozi-kicks-logo"
             />
           </Link>
           {/* {MENUS.map((menu) => {
@@ -93,8 +93,8 @@ export default function Nav() {
           })} */}
         </nav>
         {/* mobile */}
-        <nav className="flex w-full justify-between items-center sm:hidden">
-          <Link href="/game" className="w-[71px] h-10">
+        <nav className="flex w-full items-center justify-between sm:hidden">
+          <Link href="/game" className="h-10 w-[71px]">
             <Image
               src="/assets/logo/logo_dudi.png"
               width={71}
@@ -170,8 +170,8 @@ export default function Nav() {
             </Sheet> */}
             <div>
               {isConnected ? (
-                <Button className="py-[10px] px-6 text-primary-foreground h-fit">
-                  <div className="flex gap-2 items-center">
+                <Button className="h-fit px-6 py-[10px] text-primary-foreground">
+                  <div className="flex items-center gap-2">
                     <Wallet size={18} className="text-primary-foreground" />
                     <p className="text-sm font-semibold leading-5 ">
                       {`${walletAddress?.slice(0, 6)}...${walletAddress?.slice(
@@ -183,10 +183,10 @@ export default function Nav() {
                 </Button>
               ) : (
                 <Button
-                  className="py-[10px] px-6 text-zinc-900 h-fit"
+                  className="h-fit px-6 py-[10px] text-zinc-900"
                   onClick={requestWalletConnect}
                 >
-                  <div className="flex gap-2 items-center">
+                  <div className="flex items-center gap-2">
                     <Wallet size={18} className="text-primary-foreground" />
                     <p className="text-sm font-semibold leading-5 text-primary-foreground">
                       Wallet Connect
@@ -198,9 +198,9 @@ export default function Nav() {
           </div>
         </nav>
         {/* desktop */}
-        <div className="hidden sm:flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+        <div className="hidden w-full items-center gap-4 sm:flex md:ml-auto md:gap-2 lg:gap-4">
           <div className="ml-auto flex-1 sm:flex-initial">
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               {/* <Link
                 className="py-2 px-1 cursor-pointer flex gap-2 group/bridge items-center"
                 href={"https://twitter.com/dankkicks_"}
@@ -246,8 +246,8 @@ export default function Nav() {
 
               <div>
                 {isConnected ? (
-                  <Button className="py-[10px] px-6 text-primary-foreground h-fit">
-                    <div className="flex gap-2 items-center">
+                  <Button className="h-fit px-6 py-[10px] text-primary-foreground">
+                    <div className="flex items-center gap-2">
                       <Wallet size={18} className="text-primary-foreground" />
                       <p className="text-sm font-semibold leading-5 ">
                         {`${walletAddress?.slice(0, 6)}...${walletAddress?.slice(
@@ -275,10 +275,10 @@ export default function Nav() {
                   //   </div>
                   // </Button>
                   <Button
-                    className="py-[10px] px-6 text-zinc-900 h-fit"
+                    className="h-fit px-6 py-[10px] text-zinc-900"
                     onClick={requestWalletConnect}
                   >
-                    <div className="flex gap-2 items-center">
+                    <div className="flex items-center gap-2">
                       <Wallet size={18} className="text-primary-foreground" />
                       <p className="text-sm font-semibold leading-5 text-primary-foreground">
                         Wallet Connect
