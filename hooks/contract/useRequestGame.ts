@@ -118,6 +118,7 @@ export const useRequestGame = ({
 
     try {
       onProcessStartsCallback(true);
+
       const gameTxHash = await writeContractAsync({
         abi: DudiKicksABI,
         address: DUDI_KICKS_CONTRACT_ADDRESS.game,
@@ -131,6 +132,7 @@ export const useRequestGame = ({
           },
           // tokenAddress,
         ],
+        // gas: estimatedPrice?.gas,
         // value: tokenAmount,
         // gas: estimatedGas,
         // gasPrice: estimatedPrice?.gasPrice!,
