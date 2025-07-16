@@ -96,7 +96,7 @@ export default function Nav() {
         <nav className="flex w-full items-center justify-between sm:hidden">
           <Link href="/game" className="h-10 w-[71px]">
             <Image
-              src="/assets/logo/logo_dudi.png"
+              src="/brand_logo.png"
               width={71}
               height={40}
               alt="dank-kicks-logo"
