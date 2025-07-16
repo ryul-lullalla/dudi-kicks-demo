@@ -367,7 +367,9 @@ export default function GamePage() {
           <CardContent className="grid gap-6 p-0">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold text-primary">Dudi Kicks</p>
+                <p className="text-lg font-semibold text-primary">
+                  Doozi Kicks
+                </p>
                 <div>
                   <Popover>
                     <PopoverTrigger

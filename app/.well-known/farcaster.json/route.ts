@@ -23,8 +23,9 @@ export async function GET() {
     frame: withValidProperties({
       version: "1",
       name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
+      subtitle: "Predict and Win with KP",
+      description:
+        "Earn KP by writing social posts.  Use KP to predict game outcomes and multiply rewards in Doozikicks.  Turn your content into real value.",
       screenshotUrls: [
         `${URL}/screenshot_1.png`,
         `${URL}/screenshot_2.png`,
@@ -36,7 +37,7 @@ export async function GET() {
       homeUrl: URL,
       webhookUrl: `${URL}/api/webhook`,
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: [],
+      tags: ["social", "reward", "prediction", "game"],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
@@ -45,4 +46,3 @@ export async function GET() {
     }),
   });
 }
-
